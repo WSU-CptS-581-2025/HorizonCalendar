@@ -123,14 +123,32 @@ struct WeekdayOnlyDemoView: View {
 
       .dayRangeItemProvider(for: selectedDateRanges) { dayRangeLayoutContext in
         let framesOfDaysToHighlight = dayRangeLayoutContext.daysAndFrames.map { $0.frame }
+        let count = framesOfDaysToHighlight.count
+        
+        // Define color based on range length
         let indicatorColor: UIColor
-        indicatorColor = framesOfDaysToHighlight.count > 4 ? UIColor.systemBlue : UIColor.systemRed
+        
+        if count > 10 {
+          // Very long range (more than 10 days)
+          indicatorColor = UIColor.systemPurple.withAlphaComponent(0.15)
+        } else if count > 7 {
+          // Long range (8-10 days)
+          indicatorColor = UIColor.systemTeal.withAlphaComponent(0.15)
+        } else if count > 4 {
+          // Medium range (5-7 days)
+          indicatorColor = UIColor.systemBlue.withAlphaComponent(0.15)
+        } else if count > 1 {
+          // Short range (2-4 days)
+          indicatorColor = UIColor.systemRed.withAlphaComponent(0.15)
+        } else {
+          // Single day
+          indicatorColor = UIColor.systemOrange.withAlphaComponent(0.15)
+        }
+        
         // UIKit view
         return DayRangeIndicatorView.calendarItemModel(
-      invariantViewProperties: .init(indicatorColor: indicatorColor),
-      content: .init(
-      framesOfDaysToHighlight: dayRangeLayoutContext.daysAndFrames.map { $0.frame }))
-
+          invariantViewProperties: .init(indicatorColor: indicatorColor),
+          content: .init(framesOfDaysToHighlight: framesOfDaysToHighlight))
       }
 
       .onDaySelection { day in
