@@ -148,11 +148,11 @@ struct SwiftUIFlexWeekDemo: View {
                         text: dayDateFormatter.string(from: selectedDate),
                         notes: UserDefaults.standard.string(forKey: "\(dayDateFormatter.string(from: selectedDate))notes") ?? "None",
                         scrollToSelectedDate: {
-//                            calendarViewProxy.scrollToDay(
-//                                containing: selectedDate,
-//                                scrollPosition: .lastFullyVisiblePosition(padding: 50),
-//                                animated: false
-//                            )
+                            calendarViewProxy.scrollToDay(
+                                containing: selectedDate,
+                                scrollPosition: .lastFullyVisiblePosition(padding: 200),
+                                animated: true
+                            )
                         },
                         didEndEditing: { newValue in
                             // Handle save operation of note here.
