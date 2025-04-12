@@ -111,6 +111,10 @@ final class SelectedDayView: UIView, UITextFieldDelegate {
         return true
     }
 
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        didEndEditing?(textField.text)
+    }
+
     // MARK: Fileprivate
 
     fileprivate var frameOfTooltippedItem: CGRect? {
@@ -136,6 +140,7 @@ final class SelectedDayView: UIView, UITextFieldDelegate {
     private let dateLabel: UILabel
     private let notes: UITextField
     private var scrollToSelectedDate: (() -> Void)?
+    private var didEndEditing: ((String?) -> Void)?
 }
 
 // MARK: CalendarItemViewRepresentable
@@ -160,6 +165,7 @@ extension SelectedDayView: CalendarItemViewRepresentable {
         let text: String
         let notes: String?
         let scrollToSelectedDate: (() -> Void)?
+        let didEndEditing: ((String?) -> Void)?
     }
 
     static func makeView(
@@ -174,5 +180,6 @@ extension SelectedDayView: CalendarItemViewRepresentable {
         view.dateText = content.text
         view.fieldTextContent = content.notes ?? ""
         view.scrollToSelectedDate = content.scrollToSelectedDate
+        view.didEndEditing = content.didEndEditing
     }
 }
