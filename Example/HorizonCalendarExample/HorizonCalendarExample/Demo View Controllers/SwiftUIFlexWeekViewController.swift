@@ -159,6 +159,7 @@ struct SwiftUIFlexWeekDemo: View {
                             UserDefaults.standard.set(newValue, forKey: "\(dayDateFormatter.string(from: selectedDate))notes")
                             overlaidItemLocations = []
                             selectedDayRange = nil
+                            lineSpacing = defaultLineSpacing
                         }
                     )
                 )
@@ -204,6 +205,8 @@ struct SwiftUIFlexWeekDemo: View {
 
     @State private var showErrorMessage: Bool = false
     @State private var lineSpacing: CGFloat = 28
+
+    private let defaultLineSpacing: CGFloat = 28
 
     private var selectedDateRanges: Set<ClosedRange<Date>> {
         guard let selectedDayRange else { return [] }
