@@ -528,22 +528,22 @@ public final class CalendarView: UIView {
 
     var maximumPerAnimationTickOffset: CGFloat {
         switch content.monthsLayout {
-            case .vertical: bounds.height
-            case .horizontal: bounds.width
+        case .vertical: bounds.height
+        case .horizontal: bounds.width
         }
     }
 
     var firstLayoutMarginValue: CGFloat {
         switch content.monthsLayout {
-            case .vertical: directionalLayoutMargins.top
-            case .horizontal: directionalLayoutMargins.leading
+        case .vertical: directionalLayoutMargins.top
+        case .horizontal: directionalLayoutMargins.leading
         }
     }
 
     var lastLayoutMarginValue: CGFloat {
         switch content.monthsLayout {
-            case .vertical: directionalLayoutMargins.bottom
-            case .horizontal: directionalLayoutMargins.trailing
+        case .vertical: directionalLayoutMargins.bottom
+        case .horizontal: directionalLayoutMargins.trailing
         }
     }
 
@@ -601,34 +601,34 @@ public final class CalendarView: UIView {
         for scrollToItemContext: ScrollToItemContext,
         visibleItemsProvider: VisibleItemsProvider
     )
-    -> LayoutItem
+        -> LayoutItem
     {
         let offset = switch scrollMetricsMutator.scrollAxis {
-            case .vertical:
-                CGPoint(
-                    x: scrollView.contentOffset.x + directionalLayoutMargins.leading,
-                    y: scrollView.contentOffset.y
-                )
-            case .horizontal:
-                CGPoint(
-                    x: scrollView.contentOffset.x,
-                    y: scrollView.contentOffset.y + directionalLayoutMargins.top
-                )
+        case .vertical:
+            CGPoint(
+                x: scrollView.contentOffset.x + directionalLayoutMargins.leading,
+                y: scrollView.contentOffset.y
+            )
+        case .horizontal:
+            CGPoint(
+                x: scrollView.contentOffset.x,
+                y: scrollView.contentOffset.y + directionalLayoutMargins.top
+            )
         }
 
         switch scrollToItemContext.targetItem {
-            case let .month(month):
-                return visibleItemsProvider.anchorMonthHeaderItem(
-                    for: month,
-                    offset: offset,
-                    scrollPosition: scrollToItemContext.scrollPosition
-                )
-            case let .day(day):
-                return visibleItemsProvider.anchorDayItem(
-                    for: day,
-                    offset: offset,
-                    scrollPosition: scrollToItemContext.scrollPosition
-                )
+        case let .month(month):
+            return visibleItemsProvider.anchorMonthHeaderItem(
+                for: month,
+                offset: offset,
+                scrollPosition: scrollToItemContext.scrollPosition
+            )
+        case let .day(day):
+            return visibleItemsProvider.anchorDayItem(
+                for: day,
+                offset: offset,
+                scrollPosition: scrollToItemContext.scrollPosition
+            )
         }
     }
 
@@ -645,7 +645,6 @@ public final class CalendarView: UIView {
 
         return false
     }()
-
 
     private func commonInit() {
         if #available(iOS 13.0, *) {
