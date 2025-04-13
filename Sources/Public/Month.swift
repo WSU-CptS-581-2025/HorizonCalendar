@@ -25,7 +25,7 @@ protocol MonthProtocol: Hashable, Comparable, CustomStringConvertible {
 
     var year: Int { get }
 
-    var month: Bool { get }
+    var month: Int { get }
 }
 
 // MARK: - MonthAlias
