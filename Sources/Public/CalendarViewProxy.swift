@@ -19,93 +19,94 @@ import Foundation
 /// your SwiftUI view as a `@StateObject`, and use it when initializing a `CalendarViewRepresentable`.
 @available(iOS 13.0, *)
 public final class CalendarViewProxy: ObservableObject {
+    // MARK: Lifecycle
 
-  // MARK: Lifecycle
+    public init() {}
 
-  public init() { }
+    // MARK: Public
 
-  // MARK: Public
+    /// The range of months that are partially or fully visible.
+    public var visibleMonthRange: MonthComponentsRange? {
+        calendarView.visibleMonthRange
+    }
 
-  /// The range of months that are partially or fully visible.
-  public var visibleMonthRange: MonthComponentsRange? {
-    calendarView.visibleMonthRange
-  }
+    /// The range of months that are partially or fully visible.
+    public var visibleDayRange: DayComponentsRange? {
+        calendarView.visibleDayRange
+    }
 
-  /// The range of months that are partially or fully visible.
-  public var visibleDayRange: DayComponentsRange? {
-    calendarView.visibleDayRange
-  }
+    /// Scrolls the calendar to the specified month with the specified position.
+    ///
+    /// If the calendar has a non-zero frame, this function will scroll to the specified month immediately. Otherwise the scroll-to-month
+    /// action will be queued and executed once the calendar has a non-zero frame. If this function is invoked multiple times before the
+    /// calendar has a non-zero frame, only the most recent scroll-to-month action will be executed.
+    ///
+    /// - Parameters:
+    ///   - dateInTargetMonth: A date in the target month to which to scroll into view.
+    ///   - scrollPosition: The final position of the `CalendarView`'s scrollable region after the scroll completes.
+    ///   - animated: Whether the scroll should be animated (from the current position), or whether the scroll should update the
+    ///   visible region immediately with no animation.
+    public func scrollToMonth(
+        containing dateInTargetMonth: Date,
+        scrollPosition: CalendarViewScrollPosition,
+        animated: Bool
+    ) {
+        calendarView.scroll(
+            toMonthContaining: dateInTargetMonth,
+            scrollPosition: scrollPosition,
+            animated: animated
+        )
+    }
 
-  /// Scrolls the calendar to the specified month with the specified position.
-  ///
-  /// If the calendar has a non-zero frame, this function will scroll to the specified month immediately. Otherwise the scroll-to-month
-  /// action will be queued and executed once the calendar has a non-zero frame. If this function is invoked multiple times before the
-  /// calendar has a non-zero frame, only the most recent scroll-to-month action will be executed.
-  ///
-  /// - Parameters:
-  ///   - dateInTargetMonth: A date in the target month to which to scroll into view.
-  ///   - scrollPosition: The final position of the `CalendarView`'s scrollable region after the scroll completes.
-  ///   - animated: Whether the scroll should be animated (from the current position), or whether the scroll should update the
-  ///   visible region immediately with no animation.
-  public func scrollToMonth(
-    containing dateInTargetMonth: Date,
-    scrollPosition: CalendarViewScrollPosition,
-    animated: Bool)
-  {
-    calendarView.scroll(
-      toMonthContaining: dateInTargetMonth,
-      scrollPosition: scrollPosition,
-      animated: animated)
-  }
+    /// Scrolls the calendar to the specified day with the specified position.
+    ///
+    /// If the calendar has a non-zero frame, this function will scroll to the specified day immediately. Otherwise the scroll-to-day action
+    /// will be queued and executed once the calendar has a non-zero frame. If this function is invoked multiple times before the calendar
+    /// has a non-zero frame, only the most recent scroll-to-day action will be executed.
+    ///
+    /// - Parameters:
+    ///   - dateInTargetDay: A date in the target day to which to scroll into view.
+    ///   - scrollPosition: The final position of the `CalendarView`'s scrollable region after the scroll completes.
+    ///   - animated: Whether the scroll should be animated (from the current position), or whether the scroll should update the
+    ///   visible region immediately with no animation.
+    public func scrollToDay(
+        containing dateInTargetDay: Date,
+        scrollPosition: CalendarViewScrollPosition,
+        animated: Bool
+    ) {
+        calendarView.scroll(
+            toDayContaining: dateInTargetDay,
+            scrollPosition: scrollPosition,
+            animated: animated
+        )
+    }
 
-  /// Scrolls the calendar to the specified day with the specified position.
-  ///
-  /// If the calendar has a non-zero frame, this function will scroll to the specified day immediately. Otherwise the scroll-to-day action
-  /// will be queued and executed once the calendar has a non-zero frame. If this function is invoked multiple times before the calendar
-  /// has a non-zero frame, only the most recent scroll-to-day action will be executed.
-  ///
-  /// - Parameters:
-  ///   - dateInTargetDay: A date in the target day to which to scroll into view.
-  ///   - scrollPosition: The final position of the `CalendarView`'s scrollable region after the scroll completes.
-  ///   - animated: Whether the scroll should be animated (from the current position), or whether the scroll should update the
-  ///   visible region immediately with no animation.
-  public func scrollToDay(
-    containing dateInTargetDay: Date,
-    scrollPosition: CalendarViewScrollPosition,
-    animated: Bool)
-  {
-    calendarView.scroll(
-      toDayContaining: dateInTargetDay,
-      scrollPosition: scrollPosition,
-      animated: animated)
-  }
-  /// Scrolls the calendar to show today's date.
-  ///
-  /// If the calendar has a non-zero frame, this function will scroll to today immediately. Otherwise the scroll-to-day
-  /// action will be queued and executed once the calendar has a non-zero frame.
-  ///
-  /// - Parameters:
-  ///   - scrollPosition: The final position at which today should be situated in the scroll view.
-  ///   - animated: Whether the scroll should be animated (from the current position).
-  public func scrollToToday(scrollPosition: CalendarViewScrollPosition = .centered, animated: Bool = true) {
+    /// Scrolls the calendar to show today's date.
+    ///
+    /// If the calendar has a non-zero frame, this function will scroll to today immediately. Otherwise the scroll-to-day
+    /// action will be queued and executed once the calendar has a non-zero frame.
+    ///
+    /// - Parameters:
+    ///   - scrollPosition: The final position at which today should be situated in the scroll view.
+    ///   - animated: Whether the scroll should be animated (from the current position).
+    public func scrollToToday(scrollPosition: CalendarViewScrollPosition = .centered, animated: Bool = true) {
         calendarView.scrollToToday(scrollPosition: scrollPosition, animated: animated)
-  }
-
-  // MARK: Internal
-
-  var calendarView: CalendarView {
-    guard let _calendarView else {
-      fatalError("Attempted to use `CalendarViewProxy` before passing it to the `CalendarViewRepresentable` initializer.")
     }
-    return _calendarView
-  }
 
-  weak var _calendarView: CalendarView? {
-    didSet {
-      if oldValue != nil, _calendarView != oldValue {
-        fatalError("Attempted to use an existing `CalendarViewProxy` instance with a new `CalendarViewRepresentable`.")
-      }
+    // MARK: Internal
+
+    var calendarView: CalendarView {
+        guard let _calendarView else {
+            fatalError("Attempted to use `CalendarViewProxy` before passing it to the `CalendarViewRepresentable` initializer.")
+        }
+        return _calendarView
     }
-  }
 
+    weak var _calendarView: CalendarView? {
+        didSet {
+            if oldValue != nil, _calendarView != oldValue {
+                fatalError("Attempted to use an existing `CalendarViewProxy` instance with a new `CalendarViewRepresentable`.")
+            }
+        }
+    }
 }
