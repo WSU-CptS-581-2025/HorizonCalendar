@@ -15,6 +15,19 @@
 
 import Foundation
 
+// MARK: - MonthProtocol
+
+protocol MonthProtocol: Hashable, Comparable, CustomStringConvertible {
+
+    var components: DateComponents { get }
+
+    var era: Int { get }
+
+    var year: Int { get }
+
+    var month: Bool { get }
+}
+
 // MARK: - MonthAlias
 
 typealias MonthAlias = Month
