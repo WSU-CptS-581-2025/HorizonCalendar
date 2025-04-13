@@ -37,7 +37,8 @@ typealias MonthAlias = Month
 /// Represents the components of a month. This type is created internally, then vended to you via the public API. All
 /// `MonthComponents` instances that are vended to you are created using the `Calendar` instance that you provide when
 /// initializing your `CalendarView`.
-public struct Month: Hashable {
+public struct Month: MonthProtocol {
+
     // MARK: Lifecycle
 
     init(era: Int, year: Int, month: Int, isInGregorianCalendar: Bool) {
