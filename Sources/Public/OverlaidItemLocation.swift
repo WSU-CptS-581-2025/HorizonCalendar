@@ -17,16 +17,15 @@ import Foundation
 
 /// Represents the location of an item that can be overlaid.
 public enum OverlaidItemLocation: Hashable {
+    /// A month header location that can be overlaid.
+    ///
+    /// The particular month to be overlaid is specified with a `Date` instance, which will be used to determine the associated month
+    /// using the `calendar` instance with which `CalendarViewContent` was instantiated.
+    case monthHeader(monthContainingDate: Date)
 
-  /// A month header location that can be overlaid.
-  ///
-  /// The particular month to be overlaid is specified with a `Date` instance, which will be used to determine the associated month
-  /// using the `calendar` instance with which `CalendarViewContent` was instantiated.
-  case monthHeader(monthContainingDate: Date)
-
-  /// A day location that can be overlaid.
-  ///
-  /// The particular day to be overlaid is specified with a `Date` instance, which will be used to determine the associated day using
-  /// the `calendar` instance with which `CalendarViewContent` was instantiated.
-  case day(containingDate: Date)
+    /// A day location that can be overlaid.
+    ///
+    /// The particular day to be overlaid is specified with a `Date` instance, which will be used to determine the associated day using
+    /// the `calendar` instance with which `CalendarViewContent` was instantiated.
+    case day(containingDate: Date)
 }

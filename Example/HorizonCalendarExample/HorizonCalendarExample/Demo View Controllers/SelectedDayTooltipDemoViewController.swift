@@ -17,70 +17,71 @@ import HorizonCalendar
 import UIKit
 
 final class SelectedDayTooltipDemoViewController: BaseDemoViewController {
+    // MARK: Internal
 
-  // MARK: Internal
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
+        title = "Selected Day Tooltip"
 
-    title = "Selected Day Tooltip"
+        calendarView.daySelectionHandler = { [weak self] day in
+            guard let self else { return }
 
-    calendarView.daySelectionHandler = { [weak self] day in
-      guard let self else { return }
-
-      selectedDate = calendar.date(from: day.components)
-      calendarView.setContent(makeContent())
-    }
-  }
-
-  override func makeContent() -> CalendarViewContent {
-    let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 01))!
-    let endDate = calendar.date(from: DateComponents(year: 2021, month: 12, day: 31))!
-
-    let selectedDate = selectedDate
-
-    let overlaidItemLocations: Set<OverlaidItemLocation>
-    if let selectedDate {
-      overlaidItemLocations = [.day(containingDate: selectedDate)]
-    } else {
-      overlaidItemLocations = []
+            selectedDate = calendar.date(from: day.components)
+            calendarView.setContent(makeContent())
+        }
     }
 
-    return CalendarViewContent(
-      calendar: calendar,
-      visibleDateRange: startDate...endDate,
-      monthsLayout: monthsLayout)
+    override func makeContent() -> CalendarViewContent {
+        let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 01))!
+        let endDate = calendar.date(from: DateComponents(year: 2021, month: 12, day: 31))!
 
-      .interMonthSpacing(24)
+        let selectedDate = selectedDate
 
-      .dayItemProvider { [calendar, dayDateFormatter] day in
-        var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
-
-        let date = calendar.date(from: day.components)
-        if date == selectedDate {
-          invariantViewProperties.backgroundShapeDrawingConfig.borderColor = .blue
-          invariantViewProperties.backgroundShapeDrawingConfig.fillColor = .blue.withAlphaComponent(0.15)
+        let overlaidItemLocations: Set<OverlaidItemLocation> = if let selectedDate {
+            [.day(containingDate: selectedDate)]
+        } else {
+            []
         }
 
-        return DayView.calendarItemModel(
-          invariantViewProperties: invariantViewProperties,
-          content: .init(
-            dayText: "\(day.day)",
-            accessibilityLabel: date.map { dayDateFormatter.string(from: $0) },
-            accessibilityHint: nil))
-      }
+        return CalendarViewContent(
+            calendar: calendar,
+            visibleDateRange: startDate ... endDate,
+            monthsLayout: monthsLayout
+        )
 
-      .overlayItemProvider(for: overlaidItemLocations) { overlayLayoutContext in
-        TooltipView.calendarItemModel(
-          invariantViewProperties: .init(),
-          content: .init(
-            frameOfTooltippedItem: overlayLayoutContext.overlaidItemFrame,
-            text: "Selected Day"))
-      }
-  }
+        .interMonthSpacing(24)
+        .dayItemProvider { [calendar, dayDateFormatter] day in
+            var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
 
-  // MARK: Private
+            let date = calendar.date(from: day.components)
+            if date == selectedDate {
+                invariantViewProperties.backgroundShapeDrawingConfig.borderColor = .blue
+                invariantViewProperties.backgroundShapeDrawingConfig.fillColor = .blue.withAlphaComponent(0.15)
+            }
 
-  private var selectedDate: Date?
+            return DayView.calendarItemModel(
+                invariantViewProperties: invariantViewProperties,
+                content: .init(
+                    dayText: "\(day.day)",
+                    accessibilityLabel: date.map { dayDateFormatter.string(from: $0) },
+                    accessibilityHint: nil
+                )
+            )
+        }
 
+        .overlayItemProvider(for: overlaidItemLocations) { overlayLayoutContext in
+            TooltipView.calendarItemModel(
+                invariantViewProperties: .init(),
+                content: .init(
+                    frameOfTooltippedItem: overlayLayoutContext.overlaidItemFrame,
+                    text: "Selected Day"
+                )
+            )
+        }
+    }
+
+    // MARK: Private
+
+    private var selectedDate: Date?
 }

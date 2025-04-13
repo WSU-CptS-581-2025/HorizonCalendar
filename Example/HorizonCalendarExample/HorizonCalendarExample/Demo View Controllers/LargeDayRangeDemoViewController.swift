@@ -17,48 +17,47 @@ import HorizonCalendar
 import UIKit
 
 final class LargeDayRangeDemoViewController: BaseDemoViewController {
+    // MARK: Internal
 
-  // MARK: Internal
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
-
-    title = "Large Day Range"
-  }
-
-  override func viewWillLayoutSubviews() {
-    super.viewWillLayoutSubviews()
-
-    guard !didScrollToInitialMonth else { return }
-
-    let padding: CGFloat
-    switch monthsLayout {
-    case .vertical: padding = calendarView.layoutMargins.top
-    case .horizontal: padding = calendarView.layoutMargins.left
+        title = "Large Day Range"
     }
 
-    let january1500CE = calendar.date(from: DateComponents(era: 1, year: 1500, month: 01, day: 01))!
-    calendarView.scroll(
-      toMonthContaining: january1500CE,
-      scrollPosition: .firstFullyVisiblePosition(padding: padding),
-      animated: false)
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
 
-    didScrollToInitialMonth = true
-  }
+        guard !didScrollToInitialMonth else { return }
 
-  override func makeContent() -> CalendarViewContent {
-    let startDate = calendar.date(from: DateComponents(era: 0, year: 0100, month: 01, day: 01))!
-    let endDate = calendar.date(from: DateComponents(era: 1, year: 2000, month: 12, day: 31))!
+        let padding: CGFloat = switch monthsLayout {
+        case .vertical: calendarView.layoutMargins.top
+        case .horizontal: calendarView.layoutMargins.left
+        }
 
-    return CalendarViewContent(
-      calendar: calendar,
-      visibleDateRange: startDate...endDate,
-      monthsLayout: monthsLayout)
-      .interMonthSpacing(24)
-  }
+        let january1500CE = calendar.date(from: DateComponents(era: 1, year: 1500, month: 01, day: 01))!
+        calendarView.scroll(
+            toMonthContaining: january1500CE,
+            scrollPosition: .firstFullyVisiblePosition(padding: padding),
+            animated: false
+        )
 
-  // MARK: Private
+        didScrollToInitialMonth = true
+    }
 
-  private var didScrollToInitialMonth = false
+    override func makeContent() -> CalendarViewContent {
+        let startDate = calendar.date(from: DateComponents(era: 0, year: 0100, month: 01, day: 01))!
+        let endDate = calendar.date(from: DateComponents(era: 1, year: 2000, month: 12, day: 31))!
 
+        return CalendarViewContent(
+            calendar: calendar,
+            visibleDateRange: startDate ... endDate,
+            monthsLayout: monthsLayout
+        )
+        .interMonthSpacing(24)
+    }
+
+    // MARK: Private
+
+    private var didScrollToInitialMonth = false
 }

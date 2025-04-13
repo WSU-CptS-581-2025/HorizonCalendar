@@ -17,37 +17,36 @@ import HorizonCalendar
 import UIKit
 
 final class MonthBackgroundDemoViewController: BaseDemoViewController {
+    // MARK: Internal
 
-  // MARK: Internal
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
+        title = "Month Grid Background"
+    }
 
-    title = "Month Grid Background"
-  }
+    override func makeContent() -> CalendarViewContent {
+        let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 01))!
+        let endDate = calendar.date(from: DateComponents(year: 2021, month: 12, day: 31))!
 
-  override func makeContent() -> CalendarViewContent {
-    let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 01))!
-    let endDate = calendar.date(from: DateComponents(year: 2021, month: 12, day: 31))!
+        return CalendarViewContent(
+            calendar: calendar,
+            visibleDateRange: startDate ... endDate,
+            monthsLayout: monthsLayout
+        )
 
-    return CalendarViewContent(
-      calendar: calendar,
-      visibleDateRange: startDate...endDate,
-      monthsLayout: monthsLayout)
+        .interMonthSpacing(24)
+        .verticalDayMargin(8)
+        .horizontalDayMargin(8)
+        .monthBackgroundItemProvider { monthLayoutContext in
+            MonthGridBackgroundView.calendarItemModel(
+                invariantViewProperties: .init(horizontalDayMargin: 8, verticalDayMargin: 8),
+                content: .init(framesOfDays: monthLayoutContext.daysAndFrames.map(\.frame))
+            )
+        }
+    }
 
-      .interMonthSpacing(24)
-      .verticalDayMargin(8)
-      .horizontalDayMargin(8)
+    // MARK: Private
 
-      .monthBackgroundItemProvider { monthLayoutContext in
-        MonthGridBackgroundView.calendarItemModel(
-          invariantViewProperties: .init(horizontalDayMargin: 8, verticalDayMargin: 8),
-          content: .init(framesOfDays: monthLayoutContext.daysAndFrames.map { $0.frame }))
-      }
-  }
-
-  // MARK: Private
-
-  private var selectedDate: Date?
-
+    private var selectedDate: Date?
 }

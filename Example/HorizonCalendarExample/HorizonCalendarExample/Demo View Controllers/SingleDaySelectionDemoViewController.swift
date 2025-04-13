@@ -17,68 +17,69 @@ import HorizonCalendar
 import UIKit
 
 final class SingleDaySelectionDemoViewController: BaseDemoViewController {
+    // MARK: Lifecycle
 
-  // MARK: Lifecycle
-
-  required init(monthsLayout: MonthsLayout) {
-    super.init(monthsLayout: monthsLayout)
-    selectedDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 19))!
-  }
-
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
-  // MARK: Internal
-
-  override func viewDidLoad() {
-    super.viewDidLoad()
-
-    title = "Single Day Selection"
-
-    calendarView.daySelectionHandler = { [weak self] day in
-      guard let self else { return }
-
-      selectedDate = calendar.date(from: day.components)
-      calendarView.setContent(makeContent())
+    required init(monthsLayout: MonthsLayout) {
+        super.init(monthsLayout: monthsLayout)
+        selectedDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 19))!
     }
-  }
 
-  override func makeContent() -> CalendarViewContent {
-    let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 01))!
-    let endDate = calendar.date(from: DateComponents(year: 2021, month: 12, day: 31))!
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
-    let selectedDate = selectedDate
+    // MARK: Internal
 
-    return CalendarViewContent(
-      calendar: calendar,
-      visibleDateRange: startDate...endDate,
-      monthsLayout: monthsLayout)
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-      .interMonthSpacing(24)
-      .verticalDayMargin(8)
-      .horizontalDayMargin(8)
+        title = "Single Day Selection"
 
-      .dayItemProvider { [calendar, dayDateFormatter] day in
-        var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
+        calendarView.daySelectionHandler = { [weak self] day in
+            guard let self else { return }
 
-        let date = calendar.date(from: day.components)
-        if date == selectedDate {
-          invariantViewProperties.backgroundShapeDrawingConfig.borderColor = .blue
-          invariantViewProperties.backgroundShapeDrawingConfig.fillColor = .blue.withAlphaComponent(0.15)
+            selectedDate = calendar.date(from: day.components)
+            calendarView.setContent(makeContent())
         }
+    }
 
-        return DayView.calendarItemModel(
-          invariantViewProperties: invariantViewProperties,
-          content: .init(
-            dayText: "\(day.day)",
-            accessibilityLabel: date.map { dayDateFormatter.string(from: $0) },
-            accessibilityHint: nil))
-      }
-  }
+    override func makeContent() -> CalendarViewContent {
+        let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 01))!
+        let endDate = calendar.date(from: DateComponents(year: 2021, month: 12, day: 31))!
 
-  // MARK: Private
+        let selectedDate = selectedDate
 
-  private var selectedDate: Date?
+        return CalendarViewContent(
+            calendar: calendar,
+            visibleDateRange: startDate ... endDate,
+            monthsLayout: monthsLayout
+        )
 
+        .interMonthSpacing(24)
+        .verticalDayMargin(8)
+        .horizontalDayMargin(8)
+        .dayItemProvider { [calendar, dayDateFormatter] day in
+            var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
+
+            let date = calendar.date(from: day.components)
+            if date == selectedDate {
+                invariantViewProperties.backgroundShapeDrawingConfig.borderColor = .blue
+                invariantViewProperties.backgroundShapeDrawingConfig.fillColor = .blue.withAlphaComponent(0.15)
+            }
+
+            return DayView.calendarItemModel(
+                invariantViewProperties: invariantViewProperties,
+                content: .init(
+                    dayText: "\(day.day)",
+                    accessibilityLabel: date.map { dayDateFormatter.string(from: $0) },
+                    accessibilityHint: nil
+                )
+            )
+        }
+    }
+
+    // MARK: Private
+
+    private var selectedDate: Date?
 }

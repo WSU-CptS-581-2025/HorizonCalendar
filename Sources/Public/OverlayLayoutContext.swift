@@ -18,26 +18,24 @@ import CoreGraphics
 /// The layout context for an overlaid item, containing information about the location and frame of the item being overlaid, as well as the
 /// bounds available to the overlay item for drawing and layout.
 public struct OverlayLayoutContext: Hashable {
+    /// The location of the item to be overlaid.
+    public let overlaidItemLocation: OverlaidItemLocation
 
-  /// The location of the item to be overlaid.
-  public let overlaidItemLocation: OverlaidItemLocation
+    /// The frame of the overlaid item in the coordinate system of `availableBounds`.
+    ///
+    /// Use this property, in conjunction with `availableBounds`, to prevent your overlay item from laying out outside of the
+    /// available bounds.
+    public let overlaidItemFrame: CGRect
 
-  /// The frame of the overlaid item in the coordinate system of `availableBounds`.
-  ///
-  /// Use this property, in conjunction with `availableBounds`, to prevent your overlay item from laying out outside of the
-  /// available bounds.
-  public let overlaidItemFrame: CGRect
+    /// A rectangle that defines the available region into which the overlay item can be laid out.
+    ///
+    /// Use this property, in conjunction with `overlaidItemFrame`, to prevent your overlay item from laying out outside of the
+    /// available bounds.
+    public let availableBounds: CGRect
 
-  /// A rectangle that defines the available region into which the overlay item can be laid out.
-  ///
-  /// Use this property, in conjunction with `overlaidItemFrame`, to prevent your overlay item from laying out outside of the
-  /// available bounds.
-  public let availableBounds: CGRect
-
-  public func hash(into hasher: inout Hasher) {
-    hasher.combine(overlaidItemLocation)
-    hasher.combine(overlaidItemFrame)
-    hasher.combine(availableBounds)
-  }
-
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(overlaidItemLocation)
+        hasher.combine(overlaidItemFrame)
+        hasher.combine(availableBounds)
+    }
 }

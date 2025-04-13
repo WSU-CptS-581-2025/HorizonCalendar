@@ -19,215 +19,217 @@ import SwiftUI
 // MARK: - SwiftUIScreenDemoViewController
 
 final class WeekdayOnlyDemoViewController: UIViewController, DemoViewController {
+    // MARK: Lifecycle
 
-  // MARK: Lifecycle
+    init(monthsLayout: MonthsLayout) {
+        self.monthsLayout = monthsLayout
+        super.init(nibName: nil, bundle: nil)
+    }
 
-  init(monthsLayout: MonthsLayout) {
-    self.monthsLayout = monthsLayout
-    super.init(nibName: nil, bundle: nil)
-  }
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
+    // MARK: Internal
 
-  // MARK: Internal
+    let calendar = Calendar.current
+    let monthsLayout: MonthsLayout
 
-  let calendar = Calendar.current
-  let monthsLayout: MonthsLayout
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
+        title = "Weekday Only Calendar"
 
-    title = "Weekday Only Calendar"
+        let hostingController = UIHostingController(
+            rootView: WeekdayOnlyDemoView(calendar: calendar, monthsLayout: monthsLayout))
+        addChild(hostingController)
 
-    let hostingController = UIHostingController(
-      rootView: WeekdayOnlyDemoView(calendar: calendar, monthsLayout: monthsLayout))
-    addChild(hostingController)
+        view.addSubview(hostingController.view)
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
 
-    view.addSubview(hostingController.view)
-    hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
-      hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
-      hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-    ])
-
-    hostingController.didMove(toParent: self)
-  }
-
+        hostingController.didMove(toParent: self)
+    }
 }
 
 // MARK: - WeekdayOnlyDemoView
 
 struct WeekdayOnlyDemoView: View {
+    // MARK: Lifecycle
 
-  // MARK: Lifecycle
+    init(calendar: Calendar, monthsLayout: MonthsLayout) {
+        self.calendar = calendar
+        self.monthsLayout = monthsLayout
 
-  init(calendar: Calendar, monthsLayout: MonthsLayout) {
-    self.calendar = calendar
-    self.monthsLayout = monthsLayout
-      
+        let startDate = calendar.date(from: DateComponents(year: 2023, month: 01, day: 01))!
+        let endDate = calendar.date(from: DateComponents(year: 2026, month: 12, day: 31))!
+        visibleDateRange = startDate ... endDate
 
-    let startDate = calendar.date(from: DateComponents(year: 2023, month: 01, day: 01))!
-    let endDate = calendar.date(from: DateComponents(year: 2026, month: 12, day: 31))!
-    visibleDateRange = startDate...endDate
-
-    monthDateFormatter = DateFormatter()
-    monthDateFormatter.calendar = calendar
-    monthDateFormatter.locale = calendar.locale
-    monthDateFormatter.dateFormat = DateFormatter.dateFormat(
-      fromTemplate: "MMMM yyyy",
-      options: 0,
-      locale: calendar.locale ?? Locale.current)
-  }
-
-  // MARK: Internal
-
-  var body: some View {
-    CalendarViewRepresentable(
-      calendar: calendar,
-      visibleDateRange: visibleDateRange,
-      monthsLayout: monthsLayout,
-      dataDependency: selectedDayRange,
-      proxy: calendarViewProxy,
-      visibleWeekdays: Set(2...6))
-
-      .interMonthSpacing(24)
-      .verticalDayMargin(8)
-      .horizontalDayMargin(8)
-
-      .monthHeaders { month in
-        let monthHeaderText = monthDateFormatter.string(from: calendar.date(from: month.components)!)
-        Group {
-          if case .vertical = monthsLayout {
-            HStack {
-              Text(monthHeaderText)
-                .font(.title2)
-              Spacer()
-            }
-            .padding()
-          } else {
-            Text(monthHeaderText)
-              .font(.title2)
-              .padding()
-          }
-        }
-        .accessibilityAddTraits(.isHeader)
-      }
-
-      .days { day in
-        SwiftUIDayView(dayNumber: day.day, isSelected: isDaySelected(day))
-      }
-
-      .dayRangeItemProvider(for: selectedDateRanges) { dayRangeLayoutContext in
-        let framesOfDaysToHighlight = dayRangeLayoutContext.daysAndFrames.map { $0.frame }
-        let count = framesOfDaysToHighlight.count
-        
-        // Define color based on range length
-        let indicatorColor: UIColor
-        
-        if count > 10 {
-          // Very long range (more than 10 days)
-          indicatorColor = UIColor.systemPurple.withAlphaComponent(0.15)
-        } else if count > 7 {
-          // Long range (8-10 days)
-          indicatorColor = UIColor.systemTeal.withAlphaComponent(0.15)
-        } else if count > 4 {
-          // Medium range (5-7 days)
-          indicatorColor = UIColor.systemBlue.withAlphaComponent(0.15)
-        } else if count > 1 {
-          // Short range (2-4 days)
-          indicatorColor = UIColor.systemRed.withAlphaComponent(0.15)
-        } else {
-          // Single day
-          indicatorColor = UIColor.systemOrange.withAlphaComponent(0.15)
-        }
-        
-        // UIKit view
-        return DayRangeIndicatorView.calendarItemModel(
-          invariantViewProperties: .init(indicatorColor: indicatorColor),
-          content: .init(framesOfDaysToHighlight: framesOfDaysToHighlight))
-      }
-
-      .onDaySelection { day in
-        DayRangeSelectionHelper.updateDayRange(
-          afterTapSelectionOf: day,
-          existingDayRange: &selectedDayRange)
-      }
-
-      .onMultipleDaySelectionDrag(
-        began: { day in
-          DayRangeSelectionHelper.updateDayRange(
-            afterDragSelectionOf: day,
-            existingDayRange: &selectedDayRange,
-            initialDayRange: &selectedDayRangeAtStartOfDrag,
-            state: .began,
-            calendar: calendar)
-        },
-        changed: { day in
-          DayRangeSelectionHelper.updateDayRange(
-            afterDragSelectionOf: day,
-            existingDayRange: &selectedDayRange,
-            initialDayRange: &selectedDayRangeAtStartOfDrag,
-            state: .changed,
-            calendar: calendar)
-        },
-        ended: { day in
-          DayRangeSelectionHelper.updateDayRange(
-            afterDragSelectionOf: day,
-            existingDayRange: &selectedDayRange,
-            initialDayRange: &selectedDayRangeAtStartOfDrag,
-            state: .ended,
-            calendar: calendar)
-        })
-
-      .onAppear {
-        calendarViewProxy.scrollToDay(
-          containing: calendar.date(from: DateComponents(year: 2023, month: 07, day: 19))!,
-          scrollPosition: .centered,
-          animated: false)
-      }
-
-      .frame(maxWidth: 375, maxHeight: .infinity)
-  }
-
-  // MARK: Private
-
-  private let calendar: Calendar
-  private let monthsLayout: MonthsLayout
-  private let visibleDateRange: ClosedRange<Date>
-
-  private let monthDateFormatter: DateFormatter
-
-  @StateObject private var calendarViewProxy = CalendarViewProxy()
-
-  @State private var selectedDayRange: DayComponentsRange?
-  @State private var selectedDayRangeAtStartOfDrag: DayComponentsRange?
-
-  private var selectedDateRanges: Set<ClosedRange<Date>> {
-    guard let selectedDayRange else { return [] }
-    let selectedStartDate = calendar.date(from: selectedDayRange.lowerBound.components)!
-    let selectedEndDate = calendar.date(from: selectedDayRange.upperBound.components)!
-    return [selectedStartDate...selectedEndDate]
-  }
-
-  private func isDaySelected(_ day: Day) -> Bool {
-    if let selectedDayRange {
-      return day == selectedDayRange.lowerBound || day == selectedDayRange.upperBound
-    } else {
-      return false
+        monthDateFormatter = DateFormatter()
+        monthDateFormatter.calendar = calendar
+        monthDateFormatter.locale = calendar.locale
+        monthDateFormatter.dateFormat = DateFormatter.dateFormat(
+            fromTemplate: "MMMM yyyy",
+            options: 0,
+            locale: calendar.locale ?? Locale.current
+        )
     }
-  }
 
+    // MARK: Internal
+
+    var body: some View {
+        CalendarViewRepresentable(
+            calendar: calendar,
+            visibleDateRange: visibleDateRange,
+            monthsLayout: monthsLayout,
+            dataDependency: selectedDayRange,
+            proxy: calendarViewProxy,
+            visibleWeekdays: Set(2 ... 6)
+        )
+
+        .interMonthSpacing(24)
+        .verticalDayMargin(8)
+        .horizontalDayMargin(8)
+        .monthHeaders { month in
+            let monthHeaderText = monthDateFormatter.string(from: calendar.date(from: month.components)!)
+            Group {
+                if case .vertical = monthsLayout {
+                    HStack {
+                        Text(monthHeaderText)
+                            .font(.title2)
+                        Spacer()
+                    }
+                    .padding()
+                } else {
+                    Text(monthHeaderText)
+                        .font(.title2)
+                        .padding()
+                }
+            }
+            .accessibilityAddTraits(.isHeader)
+        }
+
+        .days { day in
+            SwiftUIDayView(dayNumber: day.day, isSelected: isDaySelected(day))
+        }
+
+        .dayRangeItemProvider(for: selectedDateRanges) { dayRangeLayoutContext in
+            let framesOfDaysToHighlight = dayRangeLayoutContext.daysAndFrames.map(\.frame)
+            let count = framesOfDaysToHighlight.count
+
+            // Define color based on range length
+            let indicatorColor = if count > 10 {
+                // Very long range (more than 10 days)
+                UIColor.systemPurple.withAlphaComponent(0.15)
+            } else if count > 7 {
+                // Long range (8-10 days)
+                UIColor.systemTeal.withAlphaComponent(0.15)
+            } else if count > 4 {
+                // Medium range (5-7 days)
+                UIColor.systemBlue.withAlphaComponent(0.15)
+            } else if count > 1 {
+                // Short range (2-4 days)
+                UIColor.systemRed.withAlphaComponent(0.15)
+            } else {
+                // Single day
+                UIColor.systemOrange.withAlphaComponent(0.15)
+            }
+
+            // UIKit view
+            return DayRangeIndicatorView.calendarItemModel(
+                invariantViewProperties: .init(indicatorColor: indicatorColor),
+                content: .init(framesOfDaysToHighlight: framesOfDaysToHighlight)
+            )
+        }
+
+        .onDaySelection { day in
+            DayRangeSelectionHelper.updateDayRange(
+                afterTapSelectionOf: day,
+                existingDayRange: &selectedDayRange
+            )
+        }
+
+        .onMultipleDaySelectionDrag(
+            began: { day in
+                DayRangeSelectionHelper.updateDayRange(
+                    afterDragSelectionOf: day,
+                    existingDayRange: &selectedDayRange,
+                    initialDayRange: &selectedDayRangeAtStartOfDrag,
+                    state: .began,
+                    calendar: calendar
+                )
+            },
+            changed: { day in
+                DayRangeSelectionHelper.updateDayRange(
+                    afterDragSelectionOf: day,
+                    existingDayRange: &selectedDayRange,
+                    initialDayRange: &selectedDayRangeAtStartOfDrag,
+                    state: .changed,
+                    calendar: calendar
+                )
+            },
+            ended: { day in
+                DayRangeSelectionHelper.updateDayRange(
+                    afterDragSelectionOf: day,
+                    existingDayRange: &selectedDayRange,
+                    initialDayRange: &selectedDayRangeAtStartOfDrag,
+                    state: .ended,
+                    calendar: calendar
+                )
+            }
+        )
+
+        .onAppear {
+            calendarViewProxy.scrollToDay(
+                containing: calendar.date(from: DateComponents(year: 2023, month: 07, day: 19))!,
+                scrollPosition: .centered,
+                animated: false
+            )
+        }
+
+        .frame(maxWidth: 375, maxHeight: .infinity)
+    }
+
+    // MARK: Private
+
+    private let calendar: Calendar
+    private let monthsLayout: MonthsLayout
+    private let visibleDateRange: ClosedRange<Date>
+
+    private let monthDateFormatter: DateFormatter
+
+    @StateObject private var calendarViewProxy = CalendarViewProxy()
+
+    @State private var selectedDayRange: DayComponentsRange?
+    @State private var selectedDayRangeAtStartOfDrag: DayComponentsRange?
+
+    private var selectedDateRanges: Set<ClosedRange<Date>> {
+        guard let selectedDayRange else { return [] }
+        let selectedStartDate = calendar.date(from: selectedDayRange.lowerBound.components)!
+        let selectedEndDate = calendar.date(from: selectedDayRange.upperBound.components)!
+        return [selectedStartDate ... selectedEndDate]
+    }
+
+    private func isDaySelected(_ day: Day) -> Bool {
+        if let selectedDayRange {
+            day == selectedDayRange.lowerBound || day == selectedDayRange.upperBound
+        } else {
+            false
+        }
+    }
 }
 
 // MARK: - SwiftUIScreenDemo_Previews
 
 struct WeekdayOnlyDemoViewController_Previews: PreviewProvider {
-  static var previews: some View {
-      WeekdayOnlyDemoView(calendar: Calendar.current, monthsLayout: .vertical)
-      WeekdayOnlyDemoView(calendar: Calendar.current, monthsLayout: .horizontal)
-  }
+    static var previews: some View {
+        WeekdayOnlyDemoView(calendar: Calendar.current, monthsLayout: .vertical)
+        WeekdayOnlyDemoView(calendar: Calendar.current, monthsLayout: .horizontal)
+    }
 }

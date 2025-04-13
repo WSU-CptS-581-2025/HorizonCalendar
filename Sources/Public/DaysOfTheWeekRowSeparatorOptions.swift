@@ -17,29 +17,29 @@ import UIKit
 
 /// Used to configure the days-of-the-week row's separator.
 public struct DaysOfTheWeekRowSeparatorOptions: Hashable {
+    // MARK: Lifecycle
 
-  // MARK: Lifecycle
+    /// Initialized a new `DaysOfTheWeekRowSeparatorOptions`.
+    ///
+    /// - Parameters:
+    ///   - height: The height of the separator in points.
+    ///   - color: The color of the separator.
+    public init(height: CGFloat = 1, color: UIColor = .lightGray) {
+        self.height = height
+        self.color = color
+    }
 
-  /// Initialized a new `DaysOfTheWeekRowSeparatorOptions`.
-  ///
-  /// - Parameters:
-  ///   - height: The height of the separator in points.
-  ///   - color: The color of the separator.
-  public init(height: CGFloat = 1, color: UIColor = .lightGray) {
-    self.height = height
-    self.color = color
-  }
+    // MARK: Public
 
-  // MARK: Public
+    @available(iOS 13.0, *)
+    public static var systemStyleSeparator = DaysOfTheWeekRowSeparatorOptions(
+        height: 1,
+        color: .separator
+    )
 
-  @available(iOS 13.0, *)
-  public static var systemStyleSeparator = DaysOfTheWeekRowSeparatorOptions(
-    height: 1,
-    color: .separator)
+    /// The height of the separator in points.
+    public var height: CGFloat
 
-  /// The height of the separator in points.
-  public var height: CGFloat
-
-  /// The color of the separator.
-  public var color: UIColor
+    /// The color of the separator.
+    public var color: UIColor
 }

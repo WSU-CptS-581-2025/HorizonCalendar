@@ -21,31 +21,29 @@ import UIKit
 ///
 /// Useful for working with types conforming to `CalendarItemModel` without knowing the underlying concrete type.
 public protocol AnyCalendarItemModel {
+    /// A type that helps `ItemViewReuseManager` determine which views are compatible with one another and can therefore be
+    /// recycled / reused.
+    ///
+    /// - Note: There is no reason to access this property from your feature code; it should only be accessed internally.
+    var _itemViewDifferentiator: _CalendarItemViewDifferentiator { get }
 
-  /// A type that helps `ItemViewReuseManager` determine which views are compatible with one another and can therefore be
-  /// recycled / reused.
-  ///
-  /// - Note: There is no reason to access this property from your feature code; it should only be accessed internally.
-  var _itemViewDifferentiator: _CalendarItemViewDifferentiator { get }
+    /// Builds an instance of `ViewType` by invoking its initializer with `invariantViewProperties`.
+    ///
+    /// - Note: There is no reason to invoke this function from your feature code; it should only be invoked internally.
+    func _makeView() -> UIView
 
-  /// Builds an instance of `ViewType` by invoking its initializer with `invariantViewProperties`.
-  ///
-  /// - Note: There is no reason to invoke this function from your feature code; it should only be invoked internally.
-  func _makeView() -> UIView
+    /// Updates the content on an instance of `ViewType` by invoking `setContent`.
+    ///
+    /// - Note: There is no reason to invoke this function from your feature code; it should only be invoked internally.
+    func _setContent(onViewOfSameType view: UIView)
 
-  /// Updates the content on an instance of `ViewType` by invoking `setContent`.
-  ///
-  /// - Note: There is no reason to invoke this function from your feature code; it should only be invoked internally.
-  func _setContent(onViewOfSameType view: UIView)
+    /// Compares the contents of two `CalendarItemModel`s for equality.
+    ///
+    /// - Note: There is no reason to invoke this function from your feature code; it should only be invoked internally.
+    func _isContentEqual(toContentOf other: AnyCalendarItemModel) -> Bool
 
-  /// Compares the contents of two `CalendarItemModel`s for equality.
-  ///
-  /// - Note: There is no reason to invoke this function from your feature code; it should only be invoked internally.
-  func _isContentEqual(toContentOf other: AnyCalendarItemModel) -> Bool
-
-  // TODO: Remove this in the next major release.
-  mutating func _setSwiftUIWrapperViewContentIDIfNeeded(_ id: AnyHashable)
-
+    // TODO: Remove this in the next major release.
+    mutating func _setSwiftUIWrapperViewContentIDIfNeeded(_ id: AnyHashable)
 }
 
 // MARK: - _CalendarItemViewDifferentiator
@@ -55,6 +53,6 @@ public protocol AnyCalendarItemModel {
 ///
 /// - Note: There is no reason to create an instance of this enum from your feature code; it should only be invoked internally.
 public struct _CalendarItemViewDifferentiator: Hashable {
-  let viewType: ObjectIdentifier
-  let invariantViewProperties: AnyHashable
+    let viewType: ObjectIdentifier
+    let invariantViewProperties: AnyHashable
 }

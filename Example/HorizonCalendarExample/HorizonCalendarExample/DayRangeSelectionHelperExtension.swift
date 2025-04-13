@@ -17,43 +17,39 @@ import HorizonCalendar
 import UIKit
 
 extension DayRangeSelectionHelper {
-    
     @discardableResult
     static func updateDayRange(afterDragSelectionOf day: Day,
                                existingDayRange: inout DayComponentsRange?,
                                initialDayRange: inout DayComponentsRange?,
                                state: UIGestureRecognizer.State,
-                               calendar: Calendar) -> Set<Date> {
-            
+                               calendar: Calendar) -> Set<Date>
+    {
         let invalidDates = getInvalidDateSet(day, existingDayRange, calendar)
-        
+
         guard invalidDates == [] else { return invalidDates }
-            
+
         switch state {
         case .began:
             if day != existingDayRange?.lowerBound, day != existingDayRange?.upperBound {
-                existingDayRange = day...day
+                existingDayRange = day ... day
             }
             initialDayRange = existingDayRange
-            
+
         case .changed, .ended:
             guard initialDayRange != nil else {
                 fatalError("`initialDayRange` should not be `nil`")
             }
-            
+
             performUpdateRange(day,
                                &existingDayRange,
                                &initialDayRange,
                                calendar)
-            
+
         default:
             existingDayRange = nil
             initialDayRange = nil
         }
-            
-        
-        
+
         return []
     }
-    
 }
