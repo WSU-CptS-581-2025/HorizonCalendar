@@ -779,117 +779,6 @@ public final class CalendarView: UIView {
         }
     }
 
-    private func startScrollingTowardTargetItem() {
-        let scrollToItemDisplayLink = CADisplayLink(
-            target: self,
-            selector: #selector(scrollToItemDisplayLinkFired)
-        )
-
-        scrollToItemAnimationStartTime = CACurrentMediaTime()
-
-        if #available(iOS 15.0, *) {
-            #if swift(>=5.5) // Allows us to still build using Xcode 12
-                scrollToItemDisplayLink.preferredFrameRateRange = CAFrameRateRange(
-                    minimum: 80,
-                    maximum: 120,
-                    preferred: 120
-                )
-            #endif
-        }
-
-        scrollToItemDisplayLink.add(to: .main, forMode: .common)
-        self.scrollToItemDisplayLink = scrollToItemDisplayLink
-    }
-
-    private func finalizeScrollingTowardItem(for scrollToItemContext: ScrollToItemContext) {
-        self.scrollToItemContext = ScrollToItemContext(
-            targetItem: scrollToItemContext.targetItem,
-            scrollPosition: scrollToItemContext.scrollPosition,
-            animated: false
-        )
-    }
-
-    @objc
-    private func scrollToItemDisplayLinkFired() {
-        guard
-            let scrollToItemContext,
-            let animationStartTime = scrollToItemAnimationStartTime
-        else {
-            preconditionFailure("""
-              Expected `scrollToItemContext`, `animationStartTime`, and `scrollMetricsMutator` to be
-              non-nil when animating toward an item.
-            """)
-        }
-
-        guard scrollToItemContext.animated else {
-            preconditionFailure(
-                "The scroll-to-item animation display link fired despite no animation being needed.")
-        }
-
-        guard isReadyForLayout else { return }
-
-        let positionBeforeLayout = positionRelativeToVisibleBounds(for: scrollToItemContext.targetItem)
-
-        let secondsSinceAnimationStart = CACurrentMediaTime() - animationStartTime
-        let offset = maximumPerAnimationTickOffset * CGFloat(min(secondsSinceAnimationStart / 5, 1))
-        switch positionBeforeLayout {
-        case .before:
-            scrollMetricsMutator.applyOffset(-offset)
-
-        case .after:
-            scrollMetricsMutator.applyOffset(offset)
-
-        case let .partiallyOrFullyVisible(frame):
-            let targetPosition: CGFloat
-            let currentPosition: CGFloat
-            switch content.monthsLayout {
-            case .vertical:
-                targetPosition = anchorLayoutItem(
-                    for: scrollToItemContext,
-                    visibleItemsProvider: visibleItemsProvider
-                )
-                .frame.minY
-                currentPosition = frame.minY
-            case .horizontal:
-                targetPosition = anchorLayoutItem(
-                    for: scrollToItemContext,
-                    visibleItemsProvider: visibleItemsProvider
-                )
-                .frame.minX
-                currentPosition = frame.minX
-            }
-            let distanceToTargetPosition = currentPosition - targetPosition
-            if distanceToTargetPosition <= -1 {
-                scrollMetricsMutator.applyOffset(max(-offset, distanceToTargetPosition))
-            } else if distanceToTargetPosition >= 1 {
-                scrollMetricsMutator.applyOffset(min(offset, distanceToTargetPosition))
-            } else {
-                finalizeScrollingTowardItem(for: scrollToItemContext)
-            }
-
-        case .none:
-            break
-        }
-
-        setNeedsLayout()
-        layoutIfNeeded()
-
-        // If we overshoot our target item, then finalize the animation immediately. In practice, this
-        // will only happen if the maximum per-animation-tick offset is greater than the viewport size.
-        let positionAfterLayout = positionRelativeToVisibleBounds(for: scrollToItemContext.targetItem)
-        switch (positionBeforeLayout, positionAfterLayout) {
-        case (.before, .after), (.after, .before):
-            finalizeScrollingTowardItem(for: scrollToItemContext)
-
-            // Force layout immediately to prevent the overshoot from being visible to the user.
-            setNeedsLayout()
-            layoutIfNeeded()
-
-        default:
-            break
-        }
-    }
-
     private func maintainScrollPositionAfterBoundsOrMarginsChange() {
         guard
             !scrollView.isDragging,
@@ -1312,6 +1201,117 @@ public extension CalendarView {
         } else {
             setNeedsLayout()
             layoutIfNeeded()
+        }
+    }
+
+    private func startScrollingTowardTargetItem() {
+        let scrollToItemDisplayLink = CADisplayLink(
+            target: self,
+            selector: #selector(scrollToItemDisplayLinkFired)
+        )
+
+        scrollToItemAnimationStartTime = CACurrentMediaTime()
+
+        if #available(iOS 15.0, *) {
+            #if swift(>=5.5) // Allows us to still build using Xcode 12
+                scrollToItemDisplayLink.preferredFrameRateRange = CAFrameRateRange(
+                    minimum: 80,
+                    maximum: 120,
+                    preferred: 120
+                )
+            #endif
+        }
+
+        scrollToItemDisplayLink.add(to: .main, forMode: .common)
+        self.scrollToItemDisplayLink = scrollToItemDisplayLink
+    }
+
+    private func finalizeScrollingTowardItem(for scrollToItemContext: ScrollToItemContext) {
+        self.scrollToItemContext = ScrollToItemContext(
+            targetItem: scrollToItemContext.targetItem,
+            scrollPosition: scrollToItemContext.scrollPosition,
+            animated: false
+        )
+    }
+
+    @objc
+    private func scrollToItemDisplayLinkFired() {
+        guard
+            let scrollToItemContext,
+            let animationStartTime = scrollToItemAnimationStartTime
+        else {
+            preconditionFailure("""
+              Expected `scrollToItemContext`, `animationStartTime`, and `scrollMetricsMutator` to be
+              non-nil when animating toward an item.
+            """)
+        }
+
+        guard scrollToItemContext.animated else {
+            preconditionFailure(
+                "The scroll-to-item animation display link fired despite no animation being needed.")
+        }
+
+        guard isReadyForLayout else { return }
+
+        let positionBeforeLayout = positionRelativeToVisibleBounds(for: scrollToItemContext.targetItem)
+
+        let secondsSinceAnimationStart = CACurrentMediaTime() - animationStartTime
+        let offset = maximumPerAnimationTickOffset * CGFloat(min(secondsSinceAnimationStart / 5, 1))
+        switch positionBeforeLayout {
+        case .before:
+            scrollMetricsMutator.applyOffset(-offset)
+
+        case .after:
+            scrollMetricsMutator.applyOffset(offset)
+
+        case let .partiallyOrFullyVisible(frame):
+            let targetPosition: CGFloat
+            let currentPosition: CGFloat
+            switch content.monthsLayout {
+            case .vertical:
+                targetPosition = anchorLayoutItem(
+                    for: scrollToItemContext,
+                    visibleItemsProvider: visibleItemsProvider
+                )
+                .frame.minY
+                currentPosition = frame.minY
+            case .horizontal:
+                targetPosition = anchorLayoutItem(
+                    for: scrollToItemContext,
+                    visibleItemsProvider: visibleItemsProvider
+                )
+                .frame.minX
+                currentPosition = frame.minX
+            }
+            let distanceToTargetPosition = currentPosition - targetPosition
+            if distanceToTargetPosition <= -1 {
+                scrollMetricsMutator.applyOffset(max(-offset, distanceToTargetPosition))
+            } else if distanceToTargetPosition >= 1 {
+                scrollMetricsMutator.applyOffset(min(offset, distanceToTargetPosition))
+            } else {
+                finalizeScrollingTowardItem(for: scrollToItemContext)
+            }
+
+        case .none:
+            break
+        }
+
+        setNeedsLayout()
+        layoutIfNeeded()
+
+        // If we overshoot our target item, then finalize the animation immediately. In practice, this
+        // will only happen if the maximum per-animation-tick offset is greater than the viewport size.
+        let positionAfterLayout = positionRelativeToVisibleBounds(for: scrollToItemContext.targetItem)
+        switch (positionBeforeLayout, positionAfterLayout) {
+        case (.before, .after), (.after, .before):
+            finalizeScrollingTowardItem(for: scrollToItemContext)
+
+            // Force layout immediately to prevent the overshoot from being visible to the user.
+            setNeedsLayout()
+            layoutIfNeeded()
+
+        default:
+            break
         }
     }
 }
