@@ -97,6 +97,55 @@ public extension CalendarView {
         }
     }
 
+    func updateAutoScrollingState(gestureRecognizer: UIGestureRecognizer) {
+        func enableAutoScroll(offset: CGFloat) {
+            autoScrollOffset = offset
+
+            if autoScrollDisplayLink == nil {
+                let autoScrollDisplayLink = CADisplayLink(
+                    target: self,
+                    selector: #selector(autoScrollDisplayLinkFired)
+                )
+                autoScrollDisplayLink.add(to: .main, forMode: .common)
+                self.autoScrollDisplayLink = autoScrollDisplayLink
+            }
+        }
+
+        func disableAutoScroll() {
+            autoScrollDisplayLink?.invalidate()
+            autoScrollOffset = nil
+        }
+
+        switch gestureRecognizer.state {
+        case .changed:
+            let edgeMargin: CGFloat = 32
+            let offset: CGFloat = 6
+            let locationInCalendarView = gestureRecognizer.location(in: self)
+            switch content.monthsLayout {
+            case .vertical:
+                if locationInCalendarView.y < layoutMargins.top + edgeMargin {
+                    enableAutoScroll(offset: -offset)
+                } else if locationInCalendarView.y > bounds.height - layoutMargins.bottom - edgeMargin {
+                    enableAutoScroll(offset: offset)
+                } else {
+                    disableAutoScroll()
+                }
+
+            case .horizontal:
+                if locationInCalendarView.x < layoutMargins.left + edgeMargin {
+                    enableAutoScroll(offset: -offset)
+                } else if locationInCalendarView.x > bounds.width - layoutMargins.right - edgeMargin {
+                    enableAutoScroll(offset: offset)
+                } else {
+                    disableAutoScroll()
+                }
+            }
+
+        default:
+            disableAutoScroll()
+        }
+    }
+
     private func startScrollingTowardTargetItem() {
         let scrollToItemDisplayLink = CADisplayLink(
             target: self,
@@ -152,7 +201,7 @@ public extension CalendarView {
         let offset = maximumPerAnimationTickOffset * CGFloat(min(secondsSinceAnimationStart / 5, 1))
         switch positionBeforeLayout {
         case .before:
-            scrollMetricsMutator.applyOffset(-offset)
+            scrollMetricsMutator.applyOffset(CGFloat(-offset))
 
         case .after:
             scrollMetricsMutator.applyOffset(offset)
@@ -178,7 +227,7 @@ public extension CalendarView {
             }
             let distanceToTargetPosition = currentPosition - targetPosition
             if distanceToTargetPosition <= -1 {
-                scrollMetricsMutator.applyOffset(max(-offset, distanceToTargetPosition))
+                scrollMetricsMutator.applyOffset(max(CGFloat(-offset), distanceToTargetPosition))
             } else if distanceToTargetPosition >= 1 {
                 scrollMetricsMutator.applyOffset(min(offset, distanceToTargetPosition))
             } else {
@@ -207,62 +256,13 @@ public extension CalendarView {
             break
         }
     }
-
-    private func updateAutoScrollingState(gestureRecognizer: UIGestureRecognizer) {
-        func enableAutoScroll(offset: CGFloat) {
-            autoScrollOffset = offset
-
-            if autoScrollDisplayLink == nil {
-                let autoScrollDisplayLink = CADisplayLink(
-                    target: self,
-                    selector: #selector(autoScrollDisplayLinkFired)
-                )
-                autoScrollDisplayLink.add(to: .main, forMode: .common)
-                self.autoScrollDisplayLink = autoScrollDisplayLink
-            }
-        }
-
-        func disableAutoScroll() {
-            autoScrollDisplayLink?.invalidate()
-            autoScrollOffset = nil
-        }
-
-        switch gestureRecognizer.state {
-        case .changed:
-            let edgeMargin: CGFloat = 32
-            let offset: CGFloat = 6
-            let locationInCalendarView = gestureRecognizer.location(in: self)
-            switch content.monthsLayout {
-            case .vertical:
-                if locationInCalendarView.y < layoutMargins.top + edgeMargin {
-                    enableAutoScroll(offset: -offset)
-                } else if locationInCalendarView.y > bounds.height - layoutMargins.bottom - edgeMargin {
-                    enableAutoScroll(offset: offset)
-                } else {
-                    disableAutoScroll()
-                }
-
-            case .horizontal:
-                if locationInCalendarView.x < layoutMargins.left + edgeMargin {
-                    enableAutoScroll(offset: -offset)
-                } else if locationInCalendarView.x > bounds.width - layoutMargins.right - edgeMargin {
-                    enableAutoScroll(offset: offset)
-                } else {
-                    disableAutoScroll()
-                }
-            }
-
-        default:
-            disableAutoScroll()
-        }
-    }
 }
 
 // MARK: - ScrollViewDelegate
 
 /// Rather than making `CalendarView` conform to `UIScrollViewDelegate`, which would expose those methods as public, we
 /// use a separate delegate object to hide these methods from the public API.
-private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
+final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
     // MARK: Lifecycle
 
     init(calendarView: CalendarView) {
@@ -390,7 +390,7 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
 
 /// Rather than making `CalendarView` conform to `UIGestureRecognizerDelegate`, which would expose those methods as
 /// public, we use a separate delegate object to hide these methods from the public API.
-private final class GestureRecognizerDelegate: NSObject, UIGestureRecognizerDelegate {
+final class GestureRecognizerDelegate: NSObject, UIGestureRecognizerDelegate {
     // MARK: Lifecycle
 
     init(calendarView: CalendarView) {

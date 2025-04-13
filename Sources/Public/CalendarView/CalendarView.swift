@@ -371,11 +371,9 @@ public final class CalendarView: UIView {
 
     var scrollToItemAnimationStartTime: CFTimeInterval?
 
-    // MARK: Fileprivate
+    var previousPageIndex: Int?
 
-    fileprivate var previousPageIndex: Int?
-
-    fileprivate lazy var multiDaySelectionLongPressGestureRecognizer: UILongPressGestureRecognizer = {
+    lazy var multiDaySelectionLongPressGestureRecognizer: UILongPressGestureRecognizer = {
         let gestureRecognizer = UILongPressGestureRecognizer(
             target: self,
             action: #selector(multiDaySelectionGestureRecognized(_:))
@@ -385,7 +383,7 @@ public final class CalendarView: UIView {
         return gestureRecognizer
     }()
 
-    fileprivate lazy var multiDaySelectionPanGestureRecognizer: UIPanGestureRecognizer = {
+    lazy var multiDaySelectionPanGestureRecognizer: UIPanGestureRecognizer = {
         let gestureRecognizer = UIPanGestureRecognizer(
             target: self,
             action: #selector(multiDaySelectionGestureRecognized(_:))
@@ -402,7 +400,7 @@ public final class CalendarView: UIView {
     // - On iOS if you scroll quickly toward a boundary and targetContentOffset is mutated
     //
     // https://openradar.appspot.com/radar?id=4966130615582720 demonstrates this issue on macOS.
-    fileprivate func preventLargeOverScrollIfNeeded() {
+    func preventLargeOverScrollIfNeeded() {
         guard isRunningOnMac || content.monthsLayout.isPaginationEnabled else { return }
 
         let scrollAxis = scrollMetricsMutator.scrollAxis
@@ -455,7 +453,7 @@ public final class CalendarView: UIView {
         }
     }
 
-    // MARK: Private
+    // MARK: Internal
 
     let reuseManager = ItemViewReuseManager()
     let subviewInsertionIndexTracker = SubviewInsertionIndexTracker()
@@ -482,18 +480,6 @@ public final class CalendarView: UIView {
     lazy var scrollViewDelegate = ScrollViewDelegate(calendarView: self)
     lazy var gestureRecognizerDelegate = GestureRecognizerDelegate(calendarView: self)
 
-    // Necessary to work around a `UIScrollView` behavior difference on Mac. See `scrollViewDidScroll`
-    // and `preventLargeOverScrollIfNeeded` for more context.
-    private lazy var isRunningOnMac: Bool = {
-        if #available(iOS 13.0, *) {
-            if ProcessInfo.processInfo.isMacCatalystApp {
-                return true
-            }
-        }
-
-        return false
-    }()
-
     var initialItemViewWasFocused = false {
         didSet {
             guard initialItemViewWasFocused != oldValue else { return }
@@ -509,6 +495,68 @@ public final class CalendarView: UIView {
         bounds.size != .zero
     }
 
+    func positionRelativeToVisibleBounds(
+        for targetItem: ScrollToItemContext.TargetItem)
+        -> ScrollToItemContext.PositionRelativeToVisibleBounds?
+    {
+        guard let visibleItemsDetails else { return nil }
+
+        switch targetItem {
+        case let .month(month):
+            let monthHeaderItemType = LayoutItem.ItemType.monthHeader(month)
+            if let monthFrame = visibleItemsDetails.framesForVisibleMonths[month] {
+                return .partiallyOrFullyVisible(frame: monthFrame)
+            } else if monthHeaderItemType < visibleItemsDetails.centermostLayoutItem.itemType {
+                return .before
+            } else if monthHeaderItemType > visibleItemsDetails.centermostLayoutItem.itemType {
+                return .after
+            } else {
+                preconditionFailure("Could not find a corresponding frame for \(month).")
+            }
+
+        case let .day(day):
+            let dayLayoutItemType = LayoutItem.ItemType.day(day)
+            if let dayFrame = visibleItemsDetails.framesForVisibleDays[day] {
+                return .partiallyOrFullyVisible(frame: dayFrame)
+            } else if dayLayoutItemType < visibleItemsDetails.centermostLayoutItem.itemType {
+                return .before
+            } else if dayLayoutItemType > visibleItemsDetails.centermostLayoutItem.itemType {
+                return .after
+            } else {
+                preconditionFailure("Could not find a corresponding frame for \(day).")
+            }
+        }
+    }
+
+    @objc
+    func autoScrollDisplayLinkFired() {
+        guard let autoScrollOffset else {
+            fatalError("The autoScrollDisplayLink should not fire if `autoScrollOffset` is `nil`.")
+        }
+
+        scrollMetricsMutator.applyOffset(autoScrollOffset)
+
+        if multiDaySelectionLongPressGestureRecognizer.state != .possible {
+            updateSelectedDayRange(gestureRecognizer: multiDaySelectionLongPressGestureRecognizer)
+        } else if multiDaySelectionPanGestureRecognizer.state != .possible {
+            updateSelectedDayRange(gestureRecognizer: multiDaySelectionPanGestureRecognizer)
+        } else {
+            fatalError("The autoScrollDisplayLink should not fire if both gesture recognizers are in the `.possible` state.")
+        }
+    }
+
+    // Necessary to work around a `UIScrollView` behavior difference on Mac. See `scrollViewDidScroll`
+    // and `preventLargeOverScrollIfNeeded` for more context.
+    private lazy var isRunningOnMac: Bool = {
+        if #available(iOS 13.0, *) {
+            if ProcessInfo.processInfo.isMacCatalystApp {
+                return true
+            }
+        }
+
+        return false
+    }()
+
     private var scale: CGFloat {
         let scale = traitCollection.displayScale
         // The documentation mentions that 0 is a possible value, so we guard against this.
@@ -517,7 +565,7 @@ public final class CalendarView: UIView {
         return scale > 0 ? scale : 1
     }
 
-    private var visibleItemsProvider: VisibleItemsProvider {
+    var visibleItemsProvider: VisibleItemsProvider {
         if
             let existingVisibleItemsProvider = _visibleItemsProvider,
             existingVisibleItemsProvider.size == bounds.size,
@@ -540,21 +588,21 @@ public final class CalendarView: UIView {
         }
     }
 
-    private var maximumPerAnimationTickOffset: CGFloat {
+    var maximumPerAnimationTickOffset: CGFloat {
         switch content.monthsLayout {
         case .vertical: bounds.height
         case .horizontal: bounds.width
         }
     }
 
-    private var firstLayoutMarginValue: CGFloat {
+    var firstLayoutMarginValue: CGFloat {
         switch content.monthsLayout {
         case .vertical: directionalLayoutMargins.top
         case .horizontal: directionalLayoutMargins.leading
         }
     }
 
-    private var lastLayoutMarginValue: CGFloat {
+    var lastLayoutMarginValue: CGFloat {
         switch content.monthsLayout {
         case .vertical: directionalLayoutMargins.bottom
         case .horizontal: directionalLayoutMargins.trailing
@@ -591,7 +639,7 @@ public final class CalendarView: UIView {
         )
     }
 
-    private func anchorLayoutItem(
+    func anchorLayoutItem(
         for scrollToItemContext: ScrollToItemContext,
         visibleItemsProvider: VisibleItemsProvider
     )
@@ -623,39 +671,6 @@ public final class CalendarView: UIView {
                 offset: offset,
                 scrollPosition: scrollToItemContext.scrollPosition
             )
-        }
-    }
-
-    private func positionRelativeToVisibleBounds(
-        for targetItem: ScrollToItemContext.TargetItem)
-        -> ScrollToItemContext.PositionRelativeToVisibleBounds?
-    {
-        guard let visibleItemsDetails else { return nil }
-
-        switch targetItem {
-        case let .month(month):
-            let monthHeaderItemType = LayoutItem.ItemType.monthHeader(month)
-            if let monthFrame = visibleItemsDetails.framesForVisibleMonths[month] {
-                return .partiallyOrFullyVisible(frame: monthFrame)
-            } else if monthHeaderItemType < visibleItemsDetails.centermostLayoutItem.itemType {
-                return .before
-            } else if monthHeaderItemType > visibleItemsDetails.centermostLayoutItem.itemType {
-                return .after
-            } else {
-                preconditionFailure("Could not find a corresponding frame for \(month).")
-            }
-
-        case let .day(day):
-            let dayLayoutItemType = LayoutItem.ItemType.day(day)
-            if let dayFrame = visibleItemsDetails.framesForVisibleDays[day] {
-                return .partiallyOrFullyVisible(frame: dayFrame)
-            } else if dayLayoutItemType < visibleItemsDetails.centermostLayoutItem.itemType {
-                return .before
-            } else if dayLayoutItemType > visibleItemsDetails.centermostLayoutItem.itemType {
-                return .after
-            } else {
-                preconditionFailure("Could not find a corresponding frame for \(day).")
-            }
         }
     }
 
@@ -877,23 +892,6 @@ public final class CalendarView: UIView {
             // If the gesture doesn't intersect a day in the `began` state, cancel it
             gestureRecognizer.isEnabled = false
             gestureRecognizer.isEnabled = true
-        }
-    }
-
-    @objc
-    private func autoScrollDisplayLinkFired() {
-        guard let autoScrollOffset else {
-            fatalError("The autoScrollDisplayLink should not fire if `autoScrollOffset` is `nil`.")
-        }
-
-        scrollMetricsMutator.applyOffset(autoScrollOffset)
-
-        if multiDaySelectionLongPressGestureRecognizer.state != .possible {
-            updateSelectedDayRange(gestureRecognizer: multiDaySelectionLongPressGestureRecognizer)
-        } else if multiDaySelectionPanGestureRecognizer.state != .possible {
-            updateSelectedDayRange(gestureRecognizer: multiDaySelectionPanGestureRecognizer)
-        } else {
-            fatalError("The autoScrollDisplayLink should not fire if both gesture recognizers are in the `.possible` state.")
         }
     }
 }
