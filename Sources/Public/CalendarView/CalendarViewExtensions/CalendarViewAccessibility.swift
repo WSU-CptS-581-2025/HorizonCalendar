@@ -2,7 +2,7 @@
 //  CalendarViewAccessibility.swift
 //  HorizonCalendar
 //
-//  Created by main on 4/13/25.
+//  Created by Kyle Parker on 4/13/25.
 //  Copyright © 2025 Airbnb. All rights reserved.
 //
 
