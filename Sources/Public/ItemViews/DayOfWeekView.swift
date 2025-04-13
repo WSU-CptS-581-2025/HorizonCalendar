@@ -19,215 +19,202 @@ import UIKit
 
 /// A view that represents a day-of-the-week header in a calendar month. For example, Sun, Mon, Tue, etc.
 public final class DayOfWeekView: UIView {
+    // MARK: Lifecycle
 
-  // MARK: Lifecycle
+    fileprivate init(invariantViewProperties: InvariantViewProperties) {
+        self.invariantViewProperties = invariantViewProperties
 
-  fileprivate init(invariantViewProperties: InvariantViewProperties) {
-    self.invariantViewProperties = invariantViewProperties
+        backgroundLayer = CAShapeLayer()
+        let backgroundShapeDrawingConfig = invariantViewProperties.backgroundShapeDrawingConfig
+        backgroundLayer.fillColor = backgroundShapeDrawingConfig.fillColor.cgColor
+        backgroundLayer.strokeColor = backgroundShapeDrawingConfig.borderColor.cgColor
+        backgroundLayer.lineWidth = backgroundShapeDrawingConfig.borderWidth
 
-    backgroundLayer = CAShapeLayer()
-    let backgroundShapeDrawingConfig = invariantViewProperties.backgroundShapeDrawingConfig
-    backgroundLayer.fillColor = backgroundShapeDrawingConfig.fillColor.cgColor
-    backgroundLayer.strokeColor = backgroundShapeDrawingConfig.borderColor.cgColor
-    backgroundLayer.lineWidth = backgroundShapeDrawingConfig.borderWidth
+        label = UILabel()
+        label.font = invariantViewProperties.font
+        label.textAlignment = invariantViewProperties.textAlignment
+        label.textColor = invariantViewProperties.textColor
+        label.isAccessibilityElement = false
 
-    label = UILabel()
-    label.font = invariantViewProperties.font
-    label.textAlignment = invariantViewProperties.textAlignment
-    label.textColor = invariantViewProperties.textColor
-    label.isAccessibilityElement = false
+        super.init(frame: .zero)
 
-    super.init(frame: .zero)
+        isUserInteractionEnabled = false
 
-    isUserInteractionEnabled = false
+        backgroundColor = invariantViewProperties.backgroundColor
 
-    backgroundColor = invariantViewProperties.backgroundColor
+        layer.addSublayer(backgroundLayer)
 
-    layer.addSublayer(backgroundLayer)
-
-    addSubview(label)
-  }
-
-  @available(*, unavailable)
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
-  // MARK: Public
-
-  public override func layoutSubviews() {
-    super.layoutSubviews()
-
-    let edgeInsets = invariantViewProperties.edgeInsets
-    let insetBounds = bounds.inset(
-      by: UIEdgeInsets(
-        top: edgeInsets.top,
-        left: edgeInsets.leading,
-        bottom: edgeInsets.bottom,
-        right: edgeInsets.trailing))
-
-    let path: CGPath
-    switch invariantViewProperties.shape {
-    case .circle:
-      path = UIBezierPath(
-        ovalIn: CGRect(
-          origin: CGPoint(x: edgeInsets.leading, y: edgeInsets.top),
-          size: insetBounds.size)).cgPath
-
-    case .rectangle(let cornerRadius):
-      path = UIBezierPath(roundedRect: insetBounds, cornerRadius: cornerRadius).cgPath
+        addSubview(label)
     }
 
-    backgroundLayer.path = path
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
-    label.frame = CGRect(
-      x: edgeInsets.leading,
-      y: edgeInsets.top,
-      width: insetBounds.width,
-      height: insetBounds.height)
-  }
+    // MARK: Public
 
-  // MARK: Fileprivate
+    override public func layoutSubviews() {
+        super.layoutSubviews()
 
-  fileprivate func setContent(_ content: Content) {
-    label.text = content.dayOfWeekText
-    accessibilityLabel = content.accessibilityLabel
-  }
+        let edgeInsets = invariantViewProperties.edgeInsets
+        let insetBounds = bounds.inset(
+            by: UIEdgeInsets(
+                top: edgeInsets.top,
+                left: edgeInsets.leading,
+                bottom: edgeInsets.bottom,
+                right: edgeInsets.trailing
+            ))
 
-  // MARK: Private
+        let path: CGPath = switch invariantViewProperties.shape {
+        case .circle:
+            UIBezierPath(
+                ovalIn: CGRect(
+                    origin: CGPoint(x: edgeInsets.leading, y: edgeInsets.top),
+                    size: insetBounds.size
+                )).cgPath
 
-  private let invariantViewProperties: InvariantViewProperties
-  private let backgroundLayer: CAShapeLayer
-  private let label: UILabel
+        case let .rectangle(cornerRadius):
+            UIBezierPath(roundedRect: insetBounds, cornerRadius: cornerRadius).cgPath
+        }
 
+        backgroundLayer.path = path
+
+        label.frame = CGRect(
+            x: edgeInsets.leading,
+            y: edgeInsets.top,
+            width: insetBounds.width,
+            height: insetBounds.height
+        )
+    }
+
+    // MARK: Fileprivate
+
+    fileprivate func setContent(_ content: Content) {
+        label.text = content.dayOfWeekText
+        accessibilityLabel = content.accessibilityLabel
+    }
+
+    // MARK: Private
+
+    private let invariantViewProperties: InvariantViewProperties
+    private let backgroundLayer: CAShapeLayer
+    private let label: UILabel
 }
 
 // MARK: Accessibility
 
-extension DayOfWeekView {
+public extension DayOfWeekView {
+    override var isAccessibilityElement: Bool {
+        get { invariantViewProperties.isAccessibilityElement }
+        set {}
+    }
 
-  public override var isAccessibilityElement: Bool {
-    get { invariantViewProperties.isAccessibilityElement }
-    set { }
-  }
-
-  public override var accessibilityTraits: UIAccessibilityTraits {
-    get { invariantViewProperties.accessibilityTraits }
-    set { }
-  }
-
+    override var accessibilityTraits: UIAccessibilityTraits {
+        get { invariantViewProperties.accessibilityTraits }
+        set {}
+    }
 }
 
 // MARK: DayOfWeekView.Content
 
-extension DayOfWeekView {
+public extension DayOfWeekView {
+    /// Encapsulates the data used to populate a `DayOfWeekView`'s text label. Use the `Calendar` with which you initialized
+    /// your `CalendarView` to access localized weekday symbols. For example, you can use
+    /// `calendar.shortWeekdaySymbols` or `calendar.veryShortWeekdaySymbols`. For the `accessibilityLabel`,
+    /// consider using the full-length symbol names in `calendar.weekdaySymbols`.
+    struct Content: Equatable {
+        // MARK: Lifecycle
 
-  /// Encapsulates the data used to populate a `DayOfWeekView`'s text label. Use the `Calendar` with which you initialized
-  /// your `CalendarView` to access localized weekday symbols. For example, you can use
-  /// `calendar.shortWeekdaySymbols` or `calendar.veryShortWeekdaySymbols`. For the `accessibilityLabel`,
-  /// consider using the full-length symbol names in `calendar.weekdaySymbols`.
-  public struct Content: Equatable {
+        public init(dayOfWeekText: String, accessibilityLabel: String?) {
+            self.dayOfWeekText = dayOfWeekText
+            self.accessibilityLabel = accessibilityLabel
+        }
 
-    // MARK: Lifecycle
+        // MARK: Public
 
-    public init(dayOfWeekText: String, accessibilityLabel: String?) {
-      self.dayOfWeekText = dayOfWeekText
-      self.accessibilityLabel = accessibilityLabel
+        public let dayOfWeekText: String
+        public let accessibilityLabel: String?
     }
-
-    // MARK: Public
-
-    public let dayOfWeekText: String
-    public let accessibilityLabel: String?
-  }
-
 }
 
 // MARK: DayOfWeekView.InvariantViewProperties
 
-extension DayOfWeekView {
+public extension DayOfWeekView {
+    /// Encapsulates configurable properties that change the appearance and behavior of `DayOfWeekView`. These cannot be
+    /// changed after a `DayOfWeekView` is initialized.
+    struct InvariantViewProperties: Hashable {
+        // MARK: Lifecycle
 
-  /// Encapsulates configurable properties that change the appearance and behavior of `DayOfWeekView`. These cannot be
-  /// changed after a `DayOfWeekView` is initialized.
-  public struct InvariantViewProperties: Hashable {
+        private init() {}
 
-    // MARK: Lifecycle
+        // MARK: Public
 
-    private init() { }
+        public static let base = InvariantViewProperties()
 
-    // MARK: Public
+        /// The background color of the entire view, unaffected by `edgeInsets` and behind the background layer.
+        public var backgroundColor = UIColor.clear
 
-    public static let base = InvariantViewProperties()
+        /// Edge insets that apply to the background layer and text label.
+        public var edgeInsets = NSDirectionalEdgeInsets.zero
 
-    /// The background color of the entire view, unaffected by `edgeInsets` and behind the background layer.
-    public var backgroundColor = UIColor.clear
+        /// The shape of the the background layer.
+        public var shape = Shape.circle
 
-    /// Edge insets that apply to the background layer and text label.
-    public var edgeInsets = NSDirectionalEdgeInsets.zero
+        /// The drawing config for the always-visible background layer.
+        public var backgroundShapeDrawingConfig = DrawingConfig()
 
-    /// The shape of the the background layer.
-    public var shape = Shape.circle
+        /// The font of the day-of-the-week label.
+        public var font = UIFont.systemFont(ofSize: 16)
 
-    /// The drawing config for the always-visible background layer.
-    public var backgroundShapeDrawingConfig = DrawingConfig()
+        /// The text alignment of the day-of-the-week label.
+        public var textAlignment = NSTextAlignment.center
 
-    /// The font of the day-of-the-week label.
-    public var font = UIFont.systemFont(ofSize: 16)
+        /// The text color of the day-of-the-week label.
+        public var textColor: UIColor = if #available(iOS 13.0, *) {
+            .secondaryLabel
+        } else {
+            .black
+        }
 
-    /// The text alignment of the day-of-the-week label.
-    public var textAlignment = NSTextAlignment.center
+        /// Whether or not the `DayOfWeekView` is an accessibility element or not.
+        ///
+        /// By default, this property is set to `false`. It may not be necessary for individual day-of-the-week headers to be focused by
+        /// VoiceOver, especially when your day views have accessibility labels that include the day of the week. For example, your day
+        /// view might have an accessibility label of "Sunday, September 12th, 2021."
+        public var isAccessibilityElement = false
 
-    /// The text color of the day-of-the-week label.
-    public var textColor: UIColor = {
-      if #available(iOS 13.0, *) {
-        return .secondaryLabel
-      } else {
-        return .black
-      }
-    }()
+        /// The accessibility traits of the `DayOfWeekView`.
+        public var accessibilityTraits = UIAccessibilityTraits.none
 
-    /// Whether or not the `DayOfWeekView` is an accessibility element or not.
-    ///
-    /// By default, this property is set to `false`. It may not be necessary for individual day-of-the-week headers to be focused by
-    /// VoiceOver, especially when your day views have accessibility labels that include the day of the week. For example, your day
-    /// view might have an accessibility label of "Sunday, September 12th, 2021."
-    public var isAccessibilityElement = false
-
-    /// The accessibility traits of the `DayOfWeekView`.
-    public var accessibilityTraits = UIAccessibilityTraits.none
-
-    public func hash(into hasher: inout Hasher) {
-      hasher.combine(backgroundColor)
-      hasher.combine(edgeInsets.leading)
-      hasher.combine(edgeInsets.trailing)
-      hasher.combine(edgeInsets.top)
-      hasher.combine(edgeInsets.bottom)
-      hasher.combine(shape)
-      hasher.combine(backgroundShapeDrawingConfig)
-      hasher.combine(font)
-      hasher.combine(textAlignment)
-      hasher.combine(textColor)
-      hasher.combine(isAccessibilityElement)
-      hasher.combine(accessibilityTraits)
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(backgroundColor)
+            hasher.combine(edgeInsets.leading)
+            hasher.combine(edgeInsets.trailing)
+            hasher.combine(edgeInsets.top)
+            hasher.combine(edgeInsets.bottom)
+            hasher.combine(shape)
+            hasher.combine(backgroundShapeDrawingConfig)
+            hasher.combine(font)
+            hasher.combine(textAlignment)
+            hasher.combine(textColor)
+            hasher.combine(isAccessibilityElement)
+            hasher.combine(accessibilityTraits)
+        }
     }
-
-  }
-
 }
 
 // MARK: CalendarItemViewRepresentable
 
 extension DayOfWeekView: CalendarItemViewRepresentable {
+    public static func makeView(
+        withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
+        -> DayOfWeekView
+    {
+        DayOfWeekView(invariantViewProperties: invariantViewProperties)
+    }
 
-  public static func makeView(
-    withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
-    -> DayOfWeekView
-  {
-    DayOfWeekView(invariantViewProperties: invariantViewProperties)
-  }
-
-  public static func setContent(_ content: Content, on view: DayOfWeekView) {
-    view.setContent(content)
-  }
-
+    public static func setContent(_ content: Content, on view: DayOfWeekView) {
+        view.setContent(content)
+    }
 }
