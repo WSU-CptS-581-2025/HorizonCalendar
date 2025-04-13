@@ -18,71 +18,70 @@ import SwiftUI
 import UIKit
 
 final class SwiftUIItemModelsDemoViewController: BaseDemoViewController {
+    // MARK: Internal
 
-  // MARK: Internal
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
+        title = "SwiftUI Day and Month Views"
 
-    title = "SwiftUI Day and Month Views"
+        calendarView.daySelectionHandler = { [weak self] day in
+            guard let self else { return }
 
-    calendarView.daySelectionHandler = { [weak self] day in
-      guard let self else { return }
-
-      selectedDate = calendar.date(from: day.components)
-      calendarView.setContent(makeContent())
+            selectedDate = calendar.date(from: day.components)
+            calendarView.setContent(makeContent())
+        }
     }
-  }
 
-  override func makeContent() -> CalendarViewContent {
-    let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 01))!
-    let endDate = calendar.date(from: DateComponents(year: 2021, month: 12, day: 31))!
+    override func makeContent() -> CalendarViewContent {
+        let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 01))!
+        let endDate = calendar.date(from: DateComponents(year: 2021, month: 12, day: 31))!
 
-    let selectedDate = selectedDate
+        let selectedDate = selectedDate
 
-    return CalendarViewContent(
-      calendar: calendar,
-      visibleDateRange: startDate...endDate,
-      monthsLayout: monthsLayout)
+        return CalendarViewContent(
+            calendar: calendar,
+            visibleDateRange: startDate ... endDate,
+            monthsLayout: monthsLayout
+        )
 
-      .interMonthSpacing(24)
-      .verticalDayMargin(8)
-      .horizontalDayMargin(8)
-
-      .monthHeaderItemProvider { [calendar, monthDateFormatter] month in
-        guard let firstDateInMonth = calendar.date(from: month.components) else {
-          preconditionFailure("Could not find a date corresponding to the month \(month).")
+        .interMonthSpacing(24)
+        .verticalDayMargin(8)
+        .horizontalDayMargin(8)
+        .monthHeaderItemProvider { [calendar, monthDateFormatter] month in
+            guard let firstDateInMonth = calendar.date(from: month.components) else {
+                preconditionFailure("Could not find a date corresponding to the month \(month).")
+            }
+            let monthText = monthDateFormatter.string(from: firstDateInMonth)
+            return HStack {
+                Text(monthText).font(.headline)
+                Spacer()
+            }
+            .padding(.vertical)
+            .accessibilityAddTraits(.isHeader)
+            .calendarItemModel
         }
-        let monthText = monthDateFormatter.string(from: firstDateInMonth)
-        return HStack {
-          Text(monthText).font(.headline)
-          Spacer()
+
+        .dayItemProvider { [calendar, selectedDate] day in
+            let date = calendar.date(from: day.components)
+            let isSelected = date == selectedDate
+            return SwiftUIDayView(day: day, isSelected: isSelected).calendarItemModel
         }
-        .padding(.vertical)
-        .accessibilityAddTraits(.isHeader)
-        .calendarItemModel
-      }
+    }
 
-      .dayItemProvider { [calendar, selectedDate] day in
-        let date = calendar.date(from: day.components)
-        let isSelected = date == selectedDate
-          return SwiftUIDayView(day: day, isSelected: isSelected).calendarItemModel
-      }
-  }
+    // MARK: Private
 
-  // MARK: Private
+    private lazy var monthDateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = calendar
+        dateFormatter.locale = calendar.locale
+        dateFormatter.dateFormat = DateFormatter.dateFormat(
+            fromTemplate: "MMMM yyyy",
+            options: 0,
+            locale: calendar.locale ?? Locale.current
+        )
+        return dateFormatter
+    }()
 
-  private lazy var monthDateFormatter: DateFormatter = {
-    let dateFormatter = DateFormatter()
-    dateFormatter.calendar = calendar
-    dateFormatter.locale = calendar.locale
-    dateFormatter.dateFormat = DateFormatter.dateFormat(
-      fromTemplate: "MMMM yyyy",
-      options: 0,
-      locale: calendar.locale ?? Locale.current)
-    return dateFormatter
-  }()
-
-  private var selectedDate: Date?
-
+    private var selectedDate: Date?
 }
