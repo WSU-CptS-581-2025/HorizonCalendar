@@ -19,16 +19,16 @@ import SwiftUI
 // MARK: - SwiftUIDayView
 
 struct SwiftUIDayView: View {
-
     let dayNumber: Int
     let isSelected: Bool
     let isEnabled: Bool
 
     // MARK: - Lifecycle
+
     init(day: Day, isSelected: Bool) {
-        self.dayNumber = day.day
+        dayNumber = day.day
         self.isSelected = isSelected
-        self.isEnabled = day.isEnabled
+        isEnabled = day.isEnabled
     }
 
     /// Backwards compatible
@@ -60,25 +60,23 @@ struct SwiftUIDayView: View {
         }
         .accessibilityAddTraits(.isButton)
     }
-
 }
 
 // MARK: - SwiftUIDayView_Previews
 
 struct SwiftUIDayView_Previews: PreviewProvider {
+    // MARK: Internal
 
-  // MARK: Internal
-
-  static var previews: some View {
-    Group {
-        SwiftUIDayView(dayNumber: 1, isSelected: false, isEnabled: true)
-        SwiftUIDayView(dayNumber: 19, isSelected: false, isEnabled: false)
-        SwiftUIDayView(dayNumber: 27, isSelected: true, isEnabled: true)
+    static var previews: some View {
+        Group {
+            SwiftUIDayView(dayNumber: 1, isSelected: false, isEnabled: true)
+            SwiftUIDayView(dayNumber: 19, isSelected: false, isEnabled: false)
+            SwiftUIDayView(dayNumber: 27, isSelected: true, isEnabled: true)
+        }
+        .frame(width: 50, height: 50)
     }
-    .frame(width: 50, height: 50)
-  }
 
-  // MARK: Private
+    // MARK: Private
 
-  private static let calendar = Calendar.current
+    private static let calendar = Calendar.current
 }
