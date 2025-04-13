@@ -37,7 +37,6 @@ typealias MonthAlias = Month
 /// `MonthComponents` instances that are vended to you are created using the `Calendar` instance that you provide when
 /// initializing your `CalendarView`.
 public struct Month: MonthProtocol {
-
     // MARK: Lifecycle
 
     init(era: Int, year: Int, month: Int, isInGregorianCalendar: Bool) {
@@ -73,8 +72,9 @@ extension Month: CustomStringConvertible {
 }
 
 // MARK: Comparable
-extension Month {
-    public static func < (lhs: Month, rhs: Month) -> Bool {
+
+public extension Month {
+    static func < (lhs: Month, rhs: Month) -> Bool {
         guard lhs.era == rhs.era else { return lhs.era < rhs.era }
 
         let lhsCorrectedYear = lhs.isInGregorianCalendar && lhs.era == 0 ? -lhs.year : lhs.year
