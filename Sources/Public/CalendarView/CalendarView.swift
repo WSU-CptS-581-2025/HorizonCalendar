@@ -495,6 +495,58 @@ public final class CalendarView: UIView {
         bounds.size != .zero
     }
 
+    var scale: CGFloat {
+        let scale = traitCollection.displayScale
+        // The documentation mentions that 0 is a possible value, so we guard against this.
+        // It's unclear whether values between 0 and 1 are possible, otherwise `max(scale, 1)` would
+        // suffice.
+        return scale > 0 ? scale : 1
+    }
+
+    var visibleItemsProvider: VisibleItemsProvider {
+        if
+            let existingVisibleItemsProvider = _visibleItemsProvider,
+            existingVisibleItemsProvider.size == bounds.size,
+            existingVisibleItemsProvider.layoutMargins == directionalLayoutMargins,
+            existingVisibleItemsProvider.scale == scale,
+            existingVisibleItemsProvider.backgroundColor == backgroundColor
+        {
+            return existingVisibleItemsProvider
+        } else {
+            let visibleItemsProvider = VisibleItemsProvider(
+                calendar: calendar,
+                content: content,
+                size: bounds.size,
+                layoutMargins: directionalLayoutMargins,
+                scale: scale,
+                backgroundColor: backgroundColor
+            )
+            _visibleItemsProvider = visibleItemsProvider
+            return visibleItemsProvider
+        }
+    }
+
+    var maximumPerAnimationTickOffset: CGFloat {
+        switch content.monthsLayout {
+            case .vertical: bounds.height
+            case .horizontal: bounds.width
+        }
+    }
+
+    var firstLayoutMarginValue: CGFloat {
+        switch content.monthsLayout {
+            case .vertical: directionalLayoutMargins.top
+            case .horizontal: directionalLayoutMargins.leading
+        }
+    }
+
+    var lastLayoutMarginValue: CGFloat {
+        switch content.monthsLayout {
+            case .vertical: directionalLayoutMargins.bottom
+            case .horizontal: directionalLayoutMargins.trailing
+        }
+    }
+
     func positionRelativeToVisibleBounds(
         for targetItem: ScrollToItemContext.TargetItem)
         -> ScrollToItemContext.PositionRelativeToVisibleBounds?
@@ -545,6 +597,43 @@ public final class CalendarView: UIView {
         }
     }
 
+    func anchorLayoutItem(
+        for scrollToItemContext: ScrollToItemContext,
+        visibleItemsProvider: VisibleItemsProvider
+    )
+    -> LayoutItem
+    {
+        let offset = switch scrollMetricsMutator.scrollAxis {
+            case .vertical:
+                CGPoint(
+                    x: scrollView.contentOffset.x + directionalLayoutMargins.leading,
+                    y: scrollView.contentOffset.y
+                )
+            case .horizontal:
+                CGPoint(
+                    x: scrollView.contentOffset.x,
+                    y: scrollView.contentOffset.y + directionalLayoutMargins.top
+                )
+        }
+
+        switch scrollToItemContext.targetItem {
+            case let .month(month):
+                return visibleItemsProvider.anchorMonthHeaderItem(
+                    for: month,
+                    offset: offset,
+                    scrollPosition: scrollToItemContext.scrollPosition
+                )
+            case let .day(day):
+                return visibleItemsProvider.anchorDayItem(
+                    for: day,
+                    offset: offset,
+                    scrollPosition: scrollToItemContext.scrollPosition
+                )
+        }
+    }
+
+    // MARK: Private
+
     // Necessary to work around a `UIScrollView` behavior difference on Mac. See `scrollViewDidScroll`
     // and `preventLargeOverScrollIfNeeded` for more context.
     private lazy var isRunningOnMac: Bool = {
@@ -557,57 +646,6 @@ public final class CalendarView: UIView {
         return false
     }()
 
-    private var scale: CGFloat {
-        let scale = traitCollection.displayScale
-        // The documentation mentions that 0 is a possible value, so we guard against this.
-        // It's unclear whether values between 0 and 1 are possible, otherwise `max(scale, 1)` would
-        // suffice.
-        return scale > 0 ? scale : 1
-    }
-
-    var visibleItemsProvider: VisibleItemsProvider {
-        if
-            let existingVisibleItemsProvider = _visibleItemsProvider,
-            existingVisibleItemsProvider.size == bounds.size,
-            existingVisibleItemsProvider.layoutMargins == directionalLayoutMargins,
-            existingVisibleItemsProvider.scale == scale,
-            existingVisibleItemsProvider.backgroundColor == backgroundColor
-        {
-            return existingVisibleItemsProvider
-        } else {
-            let visibleItemsProvider = VisibleItemsProvider(
-                calendar: calendar,
-                content: content,
-                size: bounds.size,
-                layoutMargins: directionalLayoutMargins,
-                scale: scale,
-                backgroundColor: backgroundColor
-            )
-            _visibleItemsProvider = visibleItemsProvider
-            return visibleItemsProvider
-        }
-    }
-
-    var maximumPerAnimationTickOffset: CGFloat {
-        switch content.monthsLayout {
-        case .vertical: bounds.height
-        case .horizontal: bounds.width
-        }
-    }
-
-    var firstLayoutMarginValue: CGFloat {
-        switch content.monthsLayout {
-        case .vertical: directionalLayoutMargins.top
-        case .horizontal: directionalLayoutMargins.leading
-        }
-    }
-
-    var lastLayoutMarginValue: CGFloat {
-        switch content.monthsLayout {
-        case .vertical: directionalLayoutMargins.bottom
-        case .horizontal: directionalLayoutMargins.trailing
-        }
-    }
 
     private func commonInit() {
         if #available(iOS 13.0, *) {
@@ -637,162 +675,6 @@ public final class CalendarView: UIView {
             name: UIAccessibility.voiceOverStatusDidChangeNotification,
             object: nil
         )
-    }
-
-    func anchorLayoutItem(
-        for scrollToItemContext: ScrollToItemContext,
-        visibleItemsProvider: VisibleItemsProvider
-    )
-        -> LayoutItem
-    {
-        let offset = switch scrollMetricsMutator.scrollAxis {
-        case .vertical:
-            CGPoint(
-                x: scrollView.contentOffset.x + directionalLayoutMargins.leading,
-                y: scrollView.contentOffset.y
-            )
-        case .horizontal:
-            CGPoint(
-                x: scrollView.contentOffset.x,
-                y: scrollView.contentOffset.y + directionalLayoutMargins.top
-            )
-        }
-
-        switch scrollToItemContext.targetItem {
-        case let .month(month):
-            return visibleItemsProvider.anchorMonthHeaderItem(
-                for: month,
-                offset: offset,
-                scrollPosition: scrollToItemContext.scrollPosition
-            )
-        case let .day(day):
-            return visibleItemsProvider.anchorDayItem(
-                for: day,
-                offset: offset,
-                scrollPosition: scrollToItemContext.scrollPosition
-            )
-        }
-    }
-
-    // This exists so that we can force a layout ourselves in preparation for an animated update.
-    private func _layoutSubviews(extendLayoutRegion: Bool) {
-        scrollView.performWithoutNotifyingDelegate {
-            scrollMetricsMutator.setUpInitialMetricsIfNeeded()
-            scrollMetricsMutator.updateContentSizePerpendicularToScrollAxis(viewportSize: bounds.size)
-        }
-
-        let anchorLayoutItem: LayoutItem
-        if let scrollToItemContext, !scrollToItemContext.animated {
-            anchorLayoutItem = self.anchorLayoutItem(
-                for: scrollToItemContext,
-                visibleItemsProvider: visibleItemsProvider
-            )
-            // Clear the `scrollToItemContext` once we use it. This could happen over the course of
-            // several layout pass attempts since `isReadyForLayout` might be false initially.
-            self.scrollToItemContext = nil
-        } else if let previousAnchorLayoutItem = self.anchorLayoutItem {
-            anchorLayoutItem = previousAnchorLayoutItem
-        } else {
-            let initialScrollToItemContext = ScrollToItemContext(
-                targetItem: .month(content.monthRange.lowerBound),
-                scrollPosition: .firstFullyVisiblePosition,
-                animated: false
-            )
-            anchorLayoutItem = self.anchorLayoutItem(
-                for: initialScrollToItemContext,
-                visibleItemsProvider: visibleItemsProvider
-            )
-        }
-
-        let currentVisibleItemsDetails = visibleItemsProvider.detailsForVisibleItems(
-            surroundingPreviouslyVisibleLayoutItem: anchorLayoutItem,
-            offset: scrollView.contentOffset,
-            extendLayoutRegion: extendLayoutRegion
-        )
-        self.anchorLayoutItem = currentVisibleItemsDetails.centermostLayoutItem
-
-        updateVisibleViews(withVisibleItems: currentVisibleItemsDetails.visibleItems)
-
-        visibleItemsDetails = currentVisibleItemsDetails
-
-        let minimumScrollOffset = visibleItemsDetails?.contentStartBoundary.map {
-            ($0 - firstLayoutMarginValue).alignedToPixel(forScreenWithScale: scale)
-        }
-        let maximumScrollOffset = visibleItemsDetails?.contentEndBoundary.map {
-            ($0 + lastLayoutMarginValue).alignedToPixel(forScreenWithScale: scale)
-        }
-        scrollView.performWithoutNotifyingDelegate {
-            scrollMetricsMutator.updateScrollBoundaries(
-                minimumScrollOffset: minimumScrollOffset,
-                maximumScrollOffset: maximumScrollOffset
-            )
-        }
-
-        scrollView.cachedAccessibilityElements = nil
-    }
-
-    private func updateVisibleViews(withVisibleItems visibleItems: Set<VisibleItem>) {
-        var viewsToHideForVisibleItems = visibleViewsForVisibleItems
-        visibleViewsForVisibleItems.removeAll(keepingCapacity: true)
-
-        let contexts = reuseManager.reusedViewContexts(
-            visibleItems: visibleItems,
-            reuseUnusedViews: !UIAccessibility.isVoiceOverRunning
-        )
-
-        for context in contexts {
-            UIView.conditionallyPerformWithoutAnimation(when: !context.isReusedViewSameAsPreviousView) {
-                if context.view.superview == nil {
-                    let insertionIndex = subviewInsertionIndexTracker.insertionIndex(
-                        forSubviewWithCorrespondingItemType: context.visibleItem.itemType)
-                    scrollView.insertSubview(context.view, at: insertionIndex)
-                }
-
-                context.view.isHidden = false
-
-                configureView(context.view, with: context.visibleItem)
-            }
-
-            visibleViewsForVisibleItems[context.visibleItem] = context.view
-
-            if context.isViewReused {
-                // Don't hide views that were reused
-                viewsToHideForVisibleItems.removeValue(forKey: context.visibleItem)
-            }
-        }
-
-        // Hide any old views that weren't reused. This is faster than adding / removing subviews.
-        // If VoiceOver is running, we remove the view to save memory (since views aren't reused).
-        for (visibleItem, viewToHide) in viewsToHideForVisibleItems {
-            if UIAccessibility.isVoiceOverRunning {
-                viewToHide.removeFromSuperview()
-                subviewInsertionIndexTracker.removedSubview(withCorrespondingItemType: visibleItem.itemType)
-            } else {
-                viewToHide.isHidden = true
-            }
-        }
-    }
-
-    private func configureView(_ view: ItemView, with visibleItem: VisibleItem) {
-        let calendarItemModel = visibleItem.calendarItemModel
-        view.calendarItemModel = calendarItemModel
-        view.itemType = visibleItem.itemType
-        view.frame = visibleItem.frame.alignedToPixels(forScreenWithScale: scale)
-
-        if traitCollection.layoutDirection == .rightToLeft {
-            view.transform = .init(scaleX: -1, y: 1)
-        } else {
-            view.transform = .identity
-        }
-
-        // Set up the selection handler
-        if case let .layoutItemType(.day(day)) = visibleItem.itemType {
-            view.selectionHandler = { [weak self] in
-                self?.daySelectionHandler?(day)
-            }
-        } else {
-            view.selectionHandler = nil
-        }
     }
 
     private func maintainScrollPositionAfterBoundsOrMarginsChange() {
