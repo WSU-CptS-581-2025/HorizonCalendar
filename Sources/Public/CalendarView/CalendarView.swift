@@ -457,30 +457,30 @@ public final class CalendarView: UIView {
 
     // MARK: Private
 
-    private let reuseManager = ItemViewReuseManager()
-    private let subviewInsertionIndexTracker = SubviewInsertionIndexTracker()
+    let reuseManager = ItemViewReuseManager()
+    let subviewInsertionIndexTracker = SubviewInsertionIndexTracker()
 
-    private var _scrollMetricsMutator: ScrollMetricsMutator?
+    var _scrollMetricsMutator: ScrollMetricsMutator?
 
-    private var anchorLayoutItem: LayoutItem?
-    private var _visibleItemsProvider: VisibleItemsProvider?
-    private var visibleItemsDetails: VisibleItemsDetails?
-    private var visibleViewsForVisibleItems = [VisibleItem: ItemView]()
+    var anchorLayoutItem: LayoutItem?
+    var _visibleItemsProvider: VisibleItemsProvider?
+    var visibleItemsDetails: VisibleItemsDetails?
+    var visibleViewsForVisibleItems = [VisibleItem: ItemView]()
 
-    private var isAnimatedUpdatePass = false
+    var isAnimatedUpdatePass = false
 
-    private var previousBounds = CGRect.zero
-    private var previousLayoutMargins = UIEdgeInsets.zero
+    var previousBounds = CGRect.zero
+    var previousLayoutMargins = UIEdgeInsets.zero
 
-    private weak var scrollToItemDisplayLink: CADisplayLink?
+    weak var scrollToItemDisplayLink: CADisplayLink?
 
-    private weak var autoScrollDisplayLink: CADisplayLink?
-    private var autoScrollOffset: CGFloat?
+    weak var autoScrollDisplayLink: CADisplayLink?
+    var autoScrollOffset: CGFloat?
 
-    private var lastMultiDaySelectionDay: Day?
+    var lastMultiDaySelectionDay: Day?
 
-    private lazy var scrollViewDelegate = ScrollViewDelegate(calendarView: self)
-    private lazy var gestureRecognizerDelegate = GestureRecognizerDelegate(calendarView: self)
+    lazy var scrollViewDelegate = ScrollViewDelegate(calendarView: self)
+    lazy var gestureRecognizerDelegate = GestureRecognizerDelegate(calendarView: self)
 
     // Necessary to work around a `UIScrollView` behavior difference on Mac. See `scrollViewDidScroll`
     // and `preventLargeOverScrollIfNeeded` for more context.
@@ -502,7 +502,7 @@ public final class CalendarView: UIView {
         }
     }
 
-    private var isReadyForLayout: Bool {
+    var isReadyForLayout: Bool {
         // There's no reason to attempt layout unless we have a non-zero `bounds.size`. We'll have a
         // non-zero size once the `frame` is set to something non-zero, either manually or via the
         // Auto Layout engine.
@@ -877,55 +877,6 @@ public final class CalendarView: UIView {
             // If the gesture doesn't intersect a day in the `began` state, cancel it
             gestureRecognizer.isEnabled = false
             gestureRecognizer.isEnabled = true
-        }
-    }
-
-    private func updateAutoScrollingState(gestureRecognizer: UIGestureRecognizer) {
-        func enableAutoScroll(offset: CGFloat) {
-            autoScrollOffset = offset
-
-            if autoScrollDisplayLink == nil {
-                let autoScrollDisplayLink = CADisplayLink(
-                    target: self,
-                    selector: #selector(autoScrollDisplayLinkFired)
-                )
-                autoScrollDisplayLink.add(to: .main, forMode: .common)
-                self.autoScrollDisplayLink = autoScrollDisplayLink
-            }
-        }
-
-        func disableAutoScroll() {
-            autoScrollDisplayLink?.invalidate()
-            autoScrollOffset = nil
-        }
-
-        switch gestureRecognizer.state {
-        case .changed:
-            let edgeMargin: CGFloat = 32
-            let offset: CGFloat = 6
-            let locationInCalendarView = gestureRecognizer.location(in: self)
-            switch content.monthsLayout {
-            case .vertical:
-                if locationInCalendarView.y < layoutMargins.top + edgeMargin {
-                    enableAutoScroll(offset: -offset)
-                } else if locationInCalendarView.y > bounds.height - layoutMargins.bottom - edgeMargin {
-                    enableAutoScroll(offset: offset)
-                } else {
-                    disableAutoScroll()
-                }
-
-            case .horizontal:
-                if locationInCalendarView.x < layoutMargins.left + edgeMargin {
-                    enableAutoScroll(offset: -offset)
-                } else if locationInCalendarView.x > bounds.width - layoutMargins.right - edgeMargin {
-                    enableAutoScroll(offset: offset)
-                } else {
-                    disableAutoScroll()
-                }
-            }
-
-        default:
-            disableAutoScroll()
         }
     }
 
