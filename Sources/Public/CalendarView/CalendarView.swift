@@ -369,6 +369,8 @@ public final class CalendarView: UIView {
         return scrollView
     }()
 
+    var scrollToItemAnimationStartTime: CFTimeInterval?
+
     // MARK: Fileprivate
 
     fileprivate var previousPageIndex: Int?
@@ -471,7 +473,6 @@ public final class CalendarView: UIView {
     private var previousLayoutMargins = UIEdgeInsets.zero
 
     private weak var scrollToItemDisplayLink: CADisplayLink?
-    private var scrollToItemAnimationStartTime: CFTimeInterval?
 
     private weak var autoScrollDisplayLink: CADisplayLink?
     private var autoScrollOffset: CGFloat?
@@ -984,59 +985,6 @@ extension CalendarView: WidthDependentIntrinsicContentHeightProviding {
         )
 
         return CGSize(width: UIView.noIntrinsicMetric, height: visibleItemsDetails.intrinsicHeight)
-    }
-}
-
-
-
-// MARK: - GestureRecognizerDelegate
-
-/// Rather than making `CalendarView` conform to `UIGestureRecognizerDelegate`, which would expose those methods as
-/// public, we use a separate delegate object to hide these methods from the public API.
-private final class GestureRecognizerDelegate: NSObject, UIGestureRecognizerDelegate {
-    // MARK: Lifecycle
-
-    init(calendarView: CalendarView) {
-        self.calendarView = calendarView
-    }
-
-    // MARK: Internal
-
-    func gestureRecognizer(
-        _ gestureRecognizer: UIGestureRecognizer,
-        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
-    )
-        -> Bool
-    {
-        guard let calendarView else { return false }
-
-        let isGestureRecognizerMultiSelectGesture =
-            gestureRecognizer === calendarView.multiDaySelectionLongPressGestureRecognizer ||
-            gestureRecognizer === calendarView.multiDaySelectionPanGestureRecognizer
-        let isOtherGestureRecognizerScrollViewPanGesture =
-            otherGestureRecognizer === calendarView.scrollView.panGestureRecognizer
-        let isMultiSelectingAndScrolling =
-            isGestureRecognizerMultiSelectGesture &&
-            isOtherGestureRecognizerScrollViewPanGesture &&
-            gestureRecognizer.state == .changed
-        return isMultiSelectingAndScrolling
-    }
-
-    // MARK: Private
-
-    private weak var calendarView: CalendarView?
-}
-
-// MARK: Scroll View Silent Updating
-
-private extension UIScrollView {
-    func performWithoutNotifyingDelegate(_ operations: () -> Void) {
-        let delegate = delegate
-        self.delegate = nil
-
-        operations()
-
-        self.delegate = delegate
     }
 }
 

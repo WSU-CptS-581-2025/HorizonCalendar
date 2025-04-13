@@ -6,7 +6,7 @@
 //  Copyright © 2025 Airbnb. All rights reserved.
 //
 
-import Foundation
+import UIKit
 // MARK: - Calendar View Scroll Extension
 
 public extension CalendarView {
@@ -334,4 +334,55 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
     // MARK: Private
 
     private weak var calendarView: CalendarView?
+}
+
+// MARK: - GestureRecognizerDelegate
+
+/// Rather than making `CalendarView` conform to `UIGestureRecognizerDelegate`, which would expose those methods as
+/// public, we use a separate delegate object to hide these methods from the public API.
+private final class GestureRecognizerDelegate: NSObject, UIGestureRecognizerDelegate {
+    // MARK: Lifecycle
+
+    init(calendarView: CalendarView) {
+        self.calendarView = calendarView
+    }
+
+    // MARK: Internal
+
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    )
+    -> Bool
+    {
+        guard let calendarView else { return false }
+
+        let isGestureRecognizerMultiSelectGesture =
+        gestureRecognizer === calendarView.multiDaySelectionLongPressGestureRecognizer ||
+        gestureRecognizer === calendarView.multiDaySelectionPanGestureRecognizer
+        let isOtherGestureRecognizerScrollViewPanGesture =
+        otherGestureRecognizer === calendarView.scrollView.panGestureRecognizer
+        let isMultiSelectingAndScrolling =
+        isGestureRecognizerMultiSelectGesture &&
+        isOtherGestureRecognizerScrollViewPanGesture &&
+        gestureRecognizer.state == .changed
+        return isMultiSelectingAndScrolling
+    }
+
+    // MARK: Private
+
+    private weak var calendarView: CalendarView?
+}
+
+// MARK: Scroll View Silent Updating
+
+private extension UIScrollView {
+    func performWithoutNotifyingDelegate(_ operations: () -> Void) {
+        let delegate = delegate
+        self.delegate = nil
+
+        operations()
+
+        self.delegate = delegate
+    }
 }
