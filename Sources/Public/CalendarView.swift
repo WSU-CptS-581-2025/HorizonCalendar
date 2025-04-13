@@ -318,90 +318,6 @@ public final class CalendarView: UIView {
         return nil
     }
 
-    /// Scrolls the calendar to the specified month with the specified position.
-    ///
-    /// If the calendar has a non-zero frame, this function will scroll to the specified month immediately. Otherwise the scroll-to-month
-    /// action will be queued and executed once the calendar has a non-zero frame. If this function is invoked multiple times before the
-    /// calendar has a non-zero frame, only the most recent scroll-to-month action will be executed.
-    ///
-    /// - Parameters:
-    ///   - dateInTargetMonth: A date in the target month to which to scroll into view.
-    ///   - scrollPosition: The final position of the `CalendarView`'s scrollable region after the scroll completes.
-    ///   - animated: Whether the scroll should be animated (from the current position), or whether the scroll should update the
-    ///   visible region immediately with no animation.
-    public func scroll(
-        toMonthContaining dateInTargetMonth: Date,
-        scrollPosition: CalendarViewScrollPosition,
-        animated: Bool
-    ) {
-        let month = calendar.month(containing: dateInTargetMonth)
-        guard content.monthRange.contains(month) else {
-            assertionFailure("""
-              Attempted to scroll to month \(month), which is out of bounds of the total date range
-              \(content.monthRange).
-            """)
-            return
-        }
-
-        // Cancel in-flight scroll
-        scrollView.setContentOffset(scrollView.contentOffset, animated: false)
-
-        scrollToItemContext = ScrollToItemContext(
-            targetItem: .month(month),
-            scrollPosition: scrollPosition,
-            animated: animated
-        )
-
-        if animated {
-            startScrollingTowardTargetItem()
-        } else {
-            setNeedsLayout()
-            layoutIfNeeded()
-        }
-    }
-
-    /// Scrolls the calendar to the specified day with the specified position.
-    ///
-    /// If the calendar has a non-zero frame, this function will scroll to the specified day immediately. Otherwise the scroll-to-day action
-    /// will be queued and executed once the calendar has a non-zero frame. If this function is invoked multiple times before the calendar
-    /// has a non-zero frame, only the most recent scroll-to-day action will be executed.
-    ///
-    /// - Parameters:
-    ///   - dateInTargetDay: A date in the target day to which to scroll into view.
-    ///   - scrollPosition: The final position of the `CalendarView`'s scrollable region after the scroll completes.
-    ///   - animated: Whether the scroll should be animated (from the current position), or whether the scroll should update the
-    ///   visible region immediately with no animation.
-    public func scroll(
-        toDayContaining dateInTargetDay: Date,
-        scrollPosition: CalendarViewScrollPosition,
-        animated: Bool
-    ) {
-        let day = calendar.day(containing: dateInTargetDay)
-        guard content.dayRange.contains(day) else {
-            assertionFailure("""
-              Attempted to scroll to day \(day), which is out of bounds of the total date range
-              \(content.dayRange).
-            """)
-            return
-        }
-
-        // Cancel in-flight scroll
-        scrollView.setContentOffset(scrollView.contentOffset, animated: false)
-
-        scrollToItemContext = ScrollToItemContext(
-            targetItem: .day(day),
-            scrollPosition: scrollPosition,
-            animated: animated
-        )
-
-        if animated {
-            startScrollingTowardTargetItem()
-        } else {
-            setNeedsLayout()
-            layoutIfNeeded()
-        }
-    }
-
     // MARK: Internal
 
     lazy var doubleLayoutPassSizingLabel = DoubleLayoutPassSizingLabel(provider: self)
@@ -1306,6 +1222,96 @@ public extension CalendarView {
             default:
                 break
             }
+        }
+    }
+}
+
+// MARK: - Calendar View Scroll Extension
+
+public extension CalendarView {
+    // MARK: Public
+
+    /// Scrolls the calendar to the specified month with the specified position.
+    ///
+    /// If the calendar has a non-zero frame, this function will scroll to the specified month immediately. Otherwise the scroll-to-month
+    /// action will be queued and executed once the calendar has a non-zero frame. If this function is invoked multiple times before the
+    /// calendar has a non-zero frame, only the most recent scroll-to-month action will be executed.
+    ///
+    /// - Parameters:
+    ///   - dateInTargetMonth: A date in the target month to which to scroll into view.
+    ///   - scrollPosition: The final position of the `CalendarView`'s scrollable region after the scroll completes.
+    ///   - animated: Whether the scroll should be animated (from the current position), or whether the scroll should update the
+    ///   visible region immediately with no animation.
+    func scroll(
+        toMonthContaining dateInTargetMonth: Date,
+        scrollPosition: CalendarViewScrollPosition,
+        animated: Bool
+    ) {
+        let month = calendar.month(containing: dateInTargetMonth)
+        guard content.monthRange.contains(month) else {
+            assertionFailure("""
+              Attempted to scroll to month \(month), which is out of bounds of the total date range
+              \(content.monthRange).
+            """)
+            return
+        }
+
+        // Cancel in-flight scroll
+        scrollView.setContentOffset(scrollView.contentOffset, animated: false)
+
+        scrollToItemContext = ScrollToItemContext(
+            targetItem: .month(month),
+            scrollPosition: scrollPosition,
+            animated: animated
+        )
+
+        if animated {
+            startScrollingTowardTargetItem()
+        } else {
+            setNeedsLayout()
+            layoutIfNeeded()
+        }
+    }
+
+    /// Scrolls the calendar to the specified day with the specified position.
+    ///
+    /// If the calendar has a non-zero frame, this function will scroll to the specified day immediately. Otherwise the scroll-to-day action
+    /// will be queued and executed once the calendar has a non-zero frame. If this function is invoked multiple times before the calendar
+    /// has a non-zero frame, only the most recent scroll-to-day action will be executed.
+    ///
+    /// - Parameters:
+    ///   - dateInTargetDay: A date in the target day to which to scroll into view.
+    ///   - scrollPosition: The final position of the `CalendarView`'s scrollable region after the scroll completes.
+    ///   - animated: Whether the scroll should be animated (from the current position), or whether the scroll should update the
+    ///   visible region immediately with no animation.
+    func scroll(
+        toDayContaining dateInTargetDay: Date,
+        scrollPosition: CalendarViewScrollPosition,
+        animated: Bool
+    ) {
+        let day = calendar.day(containing: dateInTargetDay)
+        guard content.dayRange.contains(day) else {
+            assertionFailure("""
+              Attempted to scroll to day \(day), which is out of bounds of the total date range
+              \(content.dayRange).
+            """)
+            return
+        }
+
+        // Cancel in-flight scroll
+        scrollView.setContentOffset(scrollView.contentOffset, animated: false)
+
+        scrollToItemContext = ScrollToItemContext(
+            targetItem: .day(day),
+            scrollPosition: scrollPosition,
+            animated: animated
+        )
+
+        if animated {
+            startScrollingTowardTargetItem()
+        } else {
+            setNeedsLayout()
+            layoutIfNeeded()
         }
     }
 }
