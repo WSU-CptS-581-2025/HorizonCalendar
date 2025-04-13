@@ -146,12 +146,20 @@ struct SwiftUIFlexWeekDemo: View {
                     content: SelectedDayView.Content(
                         frameOfTooltippedItem: frame,
                         text: dayDateFormatter.string(from: selectedDate),
-                        notes: "None", scrollToSelectedDate: {
+                        notes: UserDefaults.standard.string(forKey: "\(dayDateFormatter.string(from: selectedDate))notes") ?? "None",
+                        scrollToSelectedDate: {
                             calendarViewProxy.scrollToDay(
                                 containing: selectedDate,
-                                scrollPosition: .lastFullyVisiblePosition(padding: 50),
-                                animated: false
+                                scrollPosition: .lastFullyVisiblePosition(padding: 200),
+                                animated: true
                             )
+                        },
+                        didEndEditing: { newValue in
+                            // Handle save operation of note here.
+                            UserDefaults.standard.set(newValue, forKey: "\(dayDateFormatter.string(from: selectedDate))notes")
+                            overlaidItemLocations = []
+                            selectedDayRange = nil
+                            lineSpacing = defaultLineSpacing
                         }
                     )
                 )
@@ -197,6 +205,8 @@ struct SwiftUIFlexWeekDemo: View {
 
     @State private var showErrorMessage: Bool = false
     @State private var lineSpacing: CGFloat = 28
+
+    private let defaultLineSpacing: CGFloat = 28
 
     private var selectedDateRanges: Set<ClosedRange<Date>> {
         guard let selectedDayRange else { return [] }
