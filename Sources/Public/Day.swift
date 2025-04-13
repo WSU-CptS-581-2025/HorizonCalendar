@@ -103,6 +103,6 @@ public extension Day {
 // Allows the tests to pass
 extension Day: CustomStringConvertible {
     public var description: String {
-        return _dayComponents.description
+        _dayComponents.description
     }
 }
