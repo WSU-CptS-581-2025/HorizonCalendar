@@ -16,7 +16,6 @@
 import Foundation
 
 public enum DayRangeSelectionHelper {
-
     /// - Description: Check all dates in the new range and update the range if there are no blacked out dates.
     /// - Parameters:
     ///   - day: The day object selected by the user
@@ -26,7 +25,8 @@ public enum DayRangeSelectionHelper {
     @discardableResult
     public static func getInvalidDateSet(_ day: Day,
                                          _ dayRange: DayComponentsRange?,
-                                         _ calendar: Calendar) -> Set<Date> {
+                                         _ calendar: Calendar) -> Set<Date>
+    {
         var invalidDates: Set<Date> = []
 
         guard var dayRange else { return invalidDates }
@@ -60,21 +60,23 @@ public enum DayRangeSelectionHelper {
     /// - Returns: The set of invalid dates. Empty represents no invalid dates.
     @discardableResult
     public static func updateDayRange(afterTapSelectionOf day: Day,
-                                      existingDayRange: inout DayComponentsRange?) -> Set<Date> {
+                                      existingDayRange: inout DayComponentsRange?) -> Set<Date>
+    {
         if day.isEnabled {
             if let dayRange = existingDayRange,
-                dayRange.lowerBound == dayRange.upperBound,
-                day > dayRange.lowerBound {
+               dayRange.lowerBound == dayRange.upperBound,
+               day > dayRange.lowerBound
+            {
                 // Ensure date range is valid only if it will not create single-node range
                 let invalidRange = getInvalidDateSet(day, existingDayRange, Calendar.current)
                 guard invalidRange.isEmpty else {
-                    existingDayRange = day...day
+                    existingDayRange = day ... day
                     return invalidRange
                 }
 
-                existingDayRange = dayRange.lowerBound...day
+                existingDayRange = dayRange.lowerBound ... day
             } else {
-                existingDayRange = day...day
+                existingDayRange = day ... day
             }
         }
 
@@ -92,8 +94,8 @@ public enum DayRangeSelectionHelper {
     private static func performUpdateRangeHelper(_ day: Day,
                                                  _ existingDayRange: inout ClosedRange<Day>?,
                                                  _ initialDayRange: inout ClosedRange<Day>,
-                                                 _ calendar: Calendar) {
-
+                                                 _ calendar: Calendar)
+    {
         let startingLowerDate = calendar.date(from: initialDayRange.lowerBound.components)!
         let startingUpperDate = calendar.date(from: initialDayRange.upperBound.components)!
         let selectedDate = calendar.date(from: day.components)!
@@ -108,16 +110,16 @@ public enum DayRangeSelectionHelper {
                             to: startingUpperDate).day!
 
         if abs(numberOfDaysToLowerDate) < abs(numberOfDaysToUpperDate) ||
-                day < initialDayRange.lowerBound {
-
-            existingDayRange = day...initialDayRange.upperBound
+            day < initialDayRange.lowerBound
+        {
+            existingDayRange = day ... initialDayRange.upperBound
 
         } else if abs(numberOfDaysToLowerDate) > abs(numberOfDaysToUpperDate) ||
-                    day > initialDayRange.upperBound {
-
-            existingDayRange = initialDayRange.lowerBound...day
+            day > initialDayRange.upperBound
+        {
+            existingDayRange = initialDayRange.lowerBound ... day
         } else {
-            existingDayRange = day...day
+            existingDayRange = day ... day
         }
     }
 
@@ -132,7 +134,8 @@ public enum DayRangeSelectionHelper {
     public static func performUpdateRange(_ day: Day,
                                           _ existingDayRange: inout ClosedRange<Day>?,
                                           _ initialDayRange: inout ClosedRange<Day>?,
-                                          _ calendar: Calendar) {
-        performUpdateRangeHelper(day, &existingDayRange, &((initialDayRange)!), calendar)
+                                          _ calendar: Calendar)
+    {
+        performUpdateRangeHelper(day, &existingDayRange, &(initialDayRange!), calendar)
     }
 }
