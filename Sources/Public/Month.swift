@@ -18,7 +18,6 @@ import Foundation
 // MARK: - MonthProtocol
 
 protocol MonthProtocol: Hashable, Comparable, CustomStringConvertible {
-
     var components: DateComponents { get }
 
     var era: Int { get }
@@ -74,8 +73,7 @@ extension Month: CustomStringConvertible {
 }
 
 // MARK: Comparable
-
-extension Month: Comparable {
+extension Month {
     public static func < (lhs: Month, rhs: Month) -> Bool {
         guard lhs.era == rhs.era else { return lhs.era < rhs.era }
 
