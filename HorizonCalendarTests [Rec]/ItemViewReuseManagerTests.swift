@@ -31,19 +31,19 @@ final class ItemViewReuseManagerTests: XCTestCase {
       .init(
         calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -51,7 +51,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
     ]
@@ -74,19 +74,19 @@ final class ItemViewReuseManagerTests: XCTestCase {
       .init(
         calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -94,7 +94,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
     ]
@@ -128,19 +128,19 @@ final class ItemViewReuseManagerTests: XCTestCase {
       .init(
         calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -148,7 +148,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
     ]
@@ -157,19 +157,19 @@ final class ItemViewReuseManagerTests: XCTestCase {
       .init(
         calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 03, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 03, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -177,7 +177,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 04, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
     ]
@@ -206,19 +206,19 @@ final class ItemViewReuseManagerTests: XCTestCase {
       .init(
         calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -226,7 +226,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -234,7 +234,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -242,7 +242,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
     ]
@@ -253,7 +253,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 05, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -261,18 +261,18 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 05, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant4,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 04, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant5,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 05, isInGregorianCalendar: true))),
         frame: .zero),
     ]
 
@@ -320,19 +320,19 @@ final class ItemViewReuseManagerTests: XCTestCase {
       .init(
         calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -340,7 +340,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -348,7 +348,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 03, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
     ]
@@ -357,24 +357,24 @@ final class ItemViewReuseManagerTests: XCTestCase {
       .init(
         calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 03, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 04, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 05, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 03, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -382,7 +382,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 04, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -390,7 +390,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 05, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -398,7 +398,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 06, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -406,7 +406,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 07, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 07, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -414,7 +414,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 07, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 07, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
     ]
@@ -470,19 +470,19 @@ final class ItemViewReuseManagerTests: XCTestCase {
       .init(
         calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -490,7 +490,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -498,7 +498,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -506,7 +506,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
     ]
@@ -517,7 +517,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 05, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
@@ -525,18 +525,18 @@ final class ItemViewReuseManagerTests: XCTestCase {
         itemType: .layoutItemType(
           .day(
             Day(
-              month: Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true),
+              month: MonthAlias(era: 1, year: 2020, month: 05, isInGregorianCalendar: true),
               day: 01))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant4,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 04, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
         calendarItemModel: MockCalendarItemModel.variant5,
         itemType: .layoutItemType(
-          .monthHeader(Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true))),
+          .monthHeader(MonthAlias(era: 1, year: 2020, month: 05, isInGregorianCalendar: true))),
         frame: .zero),
     ]
 

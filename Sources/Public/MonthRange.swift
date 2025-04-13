@@ -21,7 +21,7 @@ typealias MonthRange = MonthComponentsRange
 
 // MARK: - MonthComponentsRange
 
-public typealias MonthComponentsRange = ClosedRange<MonthComponents>
+public typealias MonthComponentsRange = ClosedRange<Month>
 
 extension MonthRange {
     /// Instantiates a `MonthRange` that encapsulates the `dateRange` in the `calendar` as closely as possible. For example,

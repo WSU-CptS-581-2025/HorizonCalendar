@@ -99,10 +99,10 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
     fileprivate var horizontalDayMargin: CGFloat?
     fileprivate var daysOfTheWeekRowSeparatorOptions: DaysOfTheWeekRowSeparatorOptions?
 
-    fileprivate var monthHeaderItemProvider: ((Month) -> AnyCalendarItemModel?)?
+    fileprivate var monthHeaderItemProvider: ((MonthAlias) -> AnyCalendarItemModel?)?
     fileprivate var dayOfWeekItemProvider: (
         (
-            _ month: Month?,
+            _ month: MonthAlias?,
             _ weekdayIndex: Int
         )
             -> AnyCalendarItemModel?)?
@@ -336,7 +336,7 @@ public extension CalendarViewRepresentable {
     ///   - month: The `Month` for which to provide a month header item.
     /// - Returns: A new `CalendarViewRepresentable` with a new month header item provider.
     func monthHeaderItemProvider(
-        _ monthHeaderItemProvider: @escaping (_ month: MonthComponents) -> AnyCalendarItemModel?)
+        _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItemModel?)
         -> Self
     {
         var view = self
@@ -355,7 +355,7 @@ public extension CalendarViewRepresentable {
     ///   - month: The `Month` for which to provide a month header view.
     /// - Returns: A new `CalendarViewRepresentable` with custom month header views configured.
     func monthHeaders(
-        @ViewBuilder _ content: @escaping (_ month: MonthComponents) -> some View)
+        @ViewBuilder _ content: @escaping (_ month: Month) -> some View)
         -> CalendarViewRepresentable
     {
         monthHeaderItemProvider { month in
@@ -382,7 +382,7 @@ public extension CalendarViewRepresentable {
     /// - Returns: A new `CalendarViewRepresentable` with a new day-of-week item provider.
     func dayOfWeekItemProvider(
         _ dayOfWeekItemProvider: @escaping (
-            _ month: MonthComponents?,
+            _ month: Month?,
             _ weekdayIndex: Int
         )
             -> AnyCalendarItemModel?)
@@ -407,7 +407,7 @@ public extension CalendarViewRepresentable {
     ///   - weekdayIndex: The weekday index for which to provide a day-of-week header view.
     /// - Returns: A new `CalendarViewRepresentable` with custom day-of-week header views configured.
     func dayOfWeekHeaders(
-        @ViewBuilder _ content: @escaping (_ month: MonthComponents?, _ weekdayIndex: Int) -> some View)
+        @ViewBuilder _ content: @escaping (_ month: Month?, _ weekdayIndex: Int) -> some View)
         -> Self
     {
         dayOfWeekItemProvider { month, weekdayIndex in

@@ -109,7 +109,7 @@ final class FrameProvider {
   }
 
   func originOfMonth(
-    _ month: Month,
+    _ month: MonthAlias,
     beforeMonthWithOrigin subsequentMonthOrigin: CGPoint,
     subsequentMonthHeaderHeight: CGFloat,
     monthHeaderHeight: CGFloat)
@@ -130,7 +130,7 @@ final class FrameProvider {
   }
 
   func originOfMonth(
-    _ month: Month,
+    _ month: MonthAlias,
     afterMonthWithOrigin previousMonthOrigin: CGPoint,
     previousMonthHeaderHeight: CGFloat,
     monthHeaderHeight: CGFloat)
@@ -154,7 +154,7 @@ final class FrameProvider {
   }
 
   func frameOfMonth(
-    _ month: Month,
+    _ month: MonthAlias,
     withOrigin monthOrigin: CGPoint,
     monthHeaderHeight: CGFloat)
     -> CGRect
@@ -398,7 +398,7 @@ final class FrameProvider {
       monthHeaderHeight
   }
 
-  private func heightOfMonth(_ month: Month, monthHeaderHeight: CGFloat) -> CGFloat {
+  private func heightOfMonth(_ month: MonthAlias, monthHeaderHeight: CGFloat) -> CGFloat {
     let numberOfWeekRows = numberOfWeekRows(in: month)
     return monthHeaderHeight +
       content.monthDayInsets.top +
@@ -433,7 +433,7 @@ final class FrameProvider {
 
   // Gets the number of week rows in a particular month, taking into account whether the month is a
   // boundary month that's only showing a subset of days.
-  private func numberOfWeekRows(in month: Month) -> Int {
+  private func numberOfWeekRows(in month: MonthAlias) -> Int {
     let rowOfLastDateInMonth: Int
     if month == content.monthRange.lowerBound, month == content.monthRange.upperBound {
       let firstDayOfOnlyMonth = content.dayRange.lowerBound

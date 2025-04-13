@@ -64,7 +64,7 @@ final class VisibleItemsProvider {
   }
 
   func anchorMonthHeaderItem(
-    for month: Month,
+    for month: MonthAlias,
     offset: CGPoint,
     scrollPosition: CalendarViewScrollPosition)
     -> LayoutItem
@@ -308,7 +308,7 @@ final class VisibleItemsProvider {
   private var sizingMonthHeaderViewsForViewDifferentiators = [
     _CalendarItemViewDifferentiator: UIView
   ]()
-  private var previousHeightsForVisibleMonthHeaders: [Month: CGFloat]?
+  private var previousHeightsForVisibleMonthHeaders: [MonthAlias: CGFloat]?
   private var previousCalendarItemModelCache: [VisibleItem.ItemType: AnyCalendarItemModel]?
 
   private var calendar: Calendar {
@@ -443,7 +443,7 @@ final class VisibleItemsProvider {
     return monthOrigin
   }
 
-  private func monthHeaderHeight(for month: Month, context: inout VisibleItemsContext) -> CGFloat {
+  private func monthHeaderHeight(for month: MonthAlias, context: inout VisibleItemsContext) -> CGFloat {
     context.heightsForVisibleMonthHeaders.value(
       for: month,
       missingValueProvider: {
@@ -451,7 +451,7 @@ final class VisibleItemsProvider {
       })
   }
 
-  private func monthHeaderHeight(for month: Month) -> CGFloat {
+  private func monthHeaderHeight(for month: MonthAlias) -> CGFloat {
     let monthHeaderItemModel = content.monthHeaderItemProvider(month)
     let monthHeaderView = sizingMonthHeaderViewsForViewDifferentiators.value(
       for: monthHeaderItemModel._itemViewDifferentiator,
@@ -807,7 +807,7 @@ final class VisibleItemsProvider {
   }
 
   private func determineContentBoundariesIfNeeded(
-    for month: Month,
+    for month: MonthAlias,
     withFrame monthFrame: CGRect,
     context: inout VisibleItemsContext)
   {
@@ -982,7 +982,7 @@ final class VisibleItemsProvider {
         let calendar = content.calendar
         
         // Group days by month and row to find all rows that need week numbers
-        var rowsInMonth = [Month: [Int: (Day, CGRect)]]()
+        var rowsInMonth = [MonthAlias: [Int: (Day, CGRect)]]()
         
         // Find the leftmost x position among all visible days to align week numbers consistently
         var leftmostDayXPosition = CGFloat.greatestFiniteMagnitude
@@ -1141,7 +1141,7 @@ final class VisibleItemsProvider {
   /// situation by looking to see if we're close to the beginning / end of the calendar's content, and determines a correct final frame.
   private func correctedScrollToItemFrameForContentBoundaries(
     fromProposedFrame proposedFrame: CGRect,
-    ofTargetInMonth month: Month,
+    ofTargetInMonth month: MonthAlias,
     withMonthFrame monthFrame: CGRect,
     monthHeaderHeight: CGFloat,
     bounds: CGRect,
@@ -1256,17 +1256,17 @@ private struct VisibleItemsContext {
   var firstLayoutItem: LayoutItem
   var firstVisibleDay: Day?
   var lastVisibleDay: Day?
-  var firstVisibleMonth: Month?
-  var lastVisibleMonth: Month?
-  var framesForVisibleMonths = [Month: CGRect]()
+  var firstVisibleMonth: MonthAlias?
+  var lastVisibleMonth: MonthAlias?
+  var framesForVisibleMonths = [MonthAlias: CGRect]()
   var framesForVisibleDays = [Day: CGRect]()
-  var framesForDaysForVisibleMonths = [Month: [Day: CGRect]]()
-  var heightsForVisibleMonthHeaders = [Month: CGFloat]()
+  var framesForDaysForVisibleMonths = [MonthAlias: [Day: CGRect]]()
+  var heightsForVisibleMonthHeaders = [MonthAlias: CGFloat]()
   var contentStartBoundary: CGFloat?
   var contentEndBoundary: CGFloat?
   var visibleItems = Set<VisibleItem>()
   var calendarItemModelCache = [VisibleItem.ItemType: AnyCalendarItemModel]()
-  var originsForMonths = [Month: CGPoint]()
+  var originsForMonths = [MonthAlias: CGPoint]()
   var handledDayRanges = Set<DayRange>()
   var heightOfPinnedContent: CGFloat = 0
   var maxMonthHeight: CGFloat = 0
@@ -1280,7 +1280,7 @@ struct VisibleItemsDetails {
   let firstLayoutItem: LayoutItem?
   let visibleDayRange: DayRange?
   let visibleMonthRange: MonthRange?
-  let framesForVisibleMonths: [Month: CGRect]
+  let framesForVisibleMonths: [MonthAlias: CGRect]
   let framesForVisibleDays: [Day: CGRect]
   let contentStartBoundary: CGFloat?
   let contentEndBoundary: CGFloat?

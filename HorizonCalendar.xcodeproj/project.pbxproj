@@ -32,7 +32,7 @@
 		939E693724837E8700A8BCC7 /* CalendarItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E693224837E8700A8BCC7 /* CalendarItemModel.swift */; };
 		939E693924837E8700A8BCC7 /* MonthsLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E693424837E8700A8BCC7 /* MonthsLayout.swift */; };
 		939E693C2483824600A8BCC7 /* MonthRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E693B2483824600A8BCC7 /* MonthRange.swift */; };
-		939E693E24846A6600A8BCC7 /* Month.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E693D24846A6600A8BCC7 /* Month.swift */; };
+		939E693E24846A6600A8BCC7 /* MonthAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E693D24846A6600A8BCC7 /* MonthAlias.swift */; };
 		939E694024846A8C00A8BCC7 /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E693F24846A8C00A8BCC7 /* Day.swift */; };
 		939E694224846EB400A8BCC7 /* DayRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E694124846EB400A8BCC7 /* DayRange.swift */; };
 		939E69442484784D00A8BCC7 /* Calendar+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E69432484784D00A8BCC7 /* Calendar+Helpers.swift */; };
@@ -97,7 +97,7 @@
 		939E693224837E8700A8BCC7 /* CalendarItemModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarItemModel.swift; sourceTree = "<group>"; };
 		939E693424837E8700A8BCC7 /* MonthsLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthsLayout.swift; sourceTree = "<group>"; };
 		939E693B2483824600A8BCC7 /* MonthRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthRange.swift; sourceTree = "<group>"; };
-		939E693D24846A6600A8BCC7 /* Month.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Month.swift; sourceTree = "<group>"; };
+		939E693D24846A6600A8BCC7 /* MonthAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthAlias.swift; sourceTree = "<group>"; };
 		939E693F24846A8C00A8BCC7 /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
 		939E694124846EB400A8BCC7 /* DayRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRange.swift; sourceTree = "<group>"; };
 		939E69432484784D00A8BCC7 /* Calendar+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Helpers.swift"; sourceTree = "<group>"; };
@@ -210,7 +210,7 @@
 				939E694124846EB400A8BCC7 /* DayRange.swift */,
 				FD6E1CF9298D94DC00B480A6 /* DayRangeLayoutContext.swift */,
 				AA92BDA22D7418470076E283 /* DayRangeSelectionHelper.swift */,
-				939E693D24846A6600A8BCC7 /* Month.swift */,
+				939E693D24846A6600A8BCC7 /* MonthAlias.swift */,
 				939E693424837E8700A8BCC7 /* MonthsLayout.swift */,
 				FD6E1CF7298D94DC00B480A6 /* MonthLayoutContext.swift */,
 				939E693B2483824600A8BCC7 /* MonthRange.swift */,
@@ -395,7 +395,7 @@
 				939E693C2483824600A8BCC7 /* MonthRange.swift in Sources */,
 				9321957E26EEB44C0001C7E9 /* DayOfWeekView.swift in Sources */,
 				93A361F4248332AE00E6544A /* ScreenPixelAlignment.swift in Sources */,
-				939E693E24846A6600A8BCC7 /* Month.swift in Sources */,
+				939E693E24846A6600A8BCC7 /* MonthAlias.swift in Sources */,
 				939E692E24837E0300A8BCC7 /* ScrollToItemContext.swift in Sources */,
 				9321958426EEB97F0001C7E9 /* MonthHeaderView.swift in Sources */,
 				FDB6D6BD298CB1A600A17668 /* Hasher+CGRect.swift in Sources */,
