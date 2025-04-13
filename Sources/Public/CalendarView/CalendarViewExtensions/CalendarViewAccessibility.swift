@@ -10,15 +10,15 @@ import UIKit
 
 // MARK: UIAccessibility
 
-extension CalendarView {
+public extension CalendarView {
     // MARK: Public
 
-    public override var isAccessibilityElement: Bool {
+    override var isAccessibilityElement: Bool {
         get { false }
         set {}
     }
 
-    public override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
+    override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
         guard
             let firstVisibleMonth = visibleMonthRange?.lowerBound,
             let lastVisibleMonth = visibleMonthRange?.upperBound,
@@ -29,7 +29,7 @@ extension CalendarView {
                 from: firstVisibleMonthDate,
                 to: lastVisibleMonthDate
             )
-                .month
+            .month
         else {
             return false
         }
@@ -37,26 +37,26 @@ extension CalendarView {
         let proposedTargetMonth: Month
         let scrollPosition: CalendarViewScrollPosition
         switch (direction, content.monthsLayout) {
-            case (.up, .vertical), (.right, .horizontal):
-                proposedTargetMonth = Month(
-                    era: lastVisibleMonth.era,
-                    year: lastVisibleMonth.year,
-                    month: lastVisibleMonth.month - numberOfVisibleMonths,
-                    isInGregorianCalendar: lastVisibleMonth.isInGregorianCalendar
-                )
-                scrollPosition = .lastFullyVisiblePosition
+        case (.up, .vertical), (.right, .horizontal):
+            proposedTargetMonth = Month(
+                era: lastVisibleMonth.era,
+                year: lastVisibleMonth.year,
+                month: lastVisibleMonth.month - numberOfVisibleMonths,
+                isInGregorianCalendar: lastVisibleMonth.isInGregorianCalendar
+            )
+            scrollPosition = .lastFullyVisiblePosition
 
-            case (.down, .vertical), (.left, .horizontal):
-                proposedTargetMonth = Month(
-                    era: firstVisibleMonth.era,
-                    year: firstVisibleMonth.year,
-                    month: firstVisibleMonth.month + numberOfVisibleMonths,
-                    isInGregorianCalendar: firstVisibleMonth.isInGregorianCalendar
-                )
-                scrollPosition = .firstFullyVisiblePosition
+        case (.down, .vertical), (.left, .horizontal):
+            proposedTargetMonth = Month(
+                era: firstVisibleMonth.era,
+                year: firstVisibleMonth.year,
+                month: firstVisibleMonth.month + numberOfVisibleMonths,
+                isInGregorianCalendar: firstVisibleMonth.isInGregorianCalendar
+            )
+            scrollPosition = .firstFullyVisiblePosition
 
-            default:
-                return false
+        default:
+            return false
         }
 
         let firstMonth = content.monthRange.lowerBound
@@ -85,7 +85,7 @@ extension CalendarView {
     // MARK: Package-private
 
     @objc
-    func accessibilityElementFocused(_ notification: NSNotification) {
+    internal func accessibilityElementFocused(_ notification: NSNotification) {
         guard
             let element = notification.userInfo?[UIAccessibility.focusedElementUserInfoKey] as? UIResponder,
             let itemView = element.nextItemView()
@@ -99,22 +99,22 @@ extension CalendarView {
         let isElementFullyVisible: Bool
         let viewFrameInCalendarView = itemView.convert(itemView.bounds, to: self)
         switch scrollMetricsMutator.scrollAxis {
-            case .vertical:
-                let verticalBounds = CGRect(
-                    x: 0,
-                    y: layoutMargins.top,
-                    width: bounds.width,
-                    height: bounds.height - layoutMargins.top - layoutMargins.bottom
-                )
-                isElementFullyVisible = verticalBounds.contains(viewFrameInCalendarView)
-            case .horizontal:
-                let horizontalBounds = CGRect(
-                    x: layoutMargins.left,
-                    y: 0,
-                    width: bounds.width - layoutMargins.left - layoutMargins.right,
-                    height: bounds.height
-                )
-                isElementFullyVisible = horizontalBounds.contains(viewFrameInCalendarView)
+        case .vertical:
+            let verticalBounds = CGRect(
+                x: 0,
+                y: layoutMargins.top,
+                width: bounds.width,
+                height: bounds.height - layoutMargins.top - layoutMargins.bottom
+            )
+            isElementFullyVisible = verticalBounds.contains(viewFrameInCalendarView)
+        case .horizontal:
+            let horizontalBounds = CGRect(
+                x: layoutMargins.left,
+                y: 0,
+                width: bounds.width - layoutMargins.left - layoutMargins.right,
+                height: bounds.height
+            )
+            isElementFullyVisible = horizontalBounds.contains(viewFrameInCalendarView)
         }
 
         if
@@ -123,14 +123,14 @@ extension CalendarView {
             case let .layoutItemType(layoutItemType) = itemType
         {
             switch layoutItemType {
-                case let .monthHeader(month):
-                    let dateInTargetMonth = calendar.firstDate(of: month)
-                    scroll(toMonthContaining: dateInTargetMonth, scrollPosition: .centered, animated: false)
-                case let .day(day):
-                    let dateInTargetDay = calendar.startDate(of: day)
-                    scroll(toDayContaining: dateInTargetDay, scrollPosition: .centered, animated: false)
-                default:
-                    break
+            case let .monthHeader(month):
+                let dateInTargetMonth = calendar.firstDate(of: month)
+                scroll(toMonthContaining: dateInTargetMonth, scrollPosition: .centered, animated: false)
+            case let .day(day):
+                let dateInTargetDay = calendar.startDate(of: day)
+                scroll(toDayContaining: dateInTargetDay, scrollPosition: .centered, animated: false)
+            default:
+                break
             }
         }
     }
