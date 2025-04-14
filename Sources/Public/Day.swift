@@ -91,9 +91,10 @@ extension Day: Comparable {
     }
 }
 
-/// Explicitly implement Hashable
-public extension Day {
-    func hash(into hasher: inout Hasher) {
+// MARK: Hashable
+
+extension Day: Hashable {
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(day)
         hasher.combine(month)
         hasher.combine(isEnabled)
