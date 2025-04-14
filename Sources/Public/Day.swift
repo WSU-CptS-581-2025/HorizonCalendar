@@ -22,7 +22,7 @@ public protocol DayAvailabilityProvider {
     func isEnabled(_ day: Date) -> Bool
 }
 
-public protocol DayProtcol: Hashable, Comparable {
+public protocol DayProtcol: Hashable, Comparable, CustomStringConvertible {
     static var availabilityProvider: DayAvailabilityProvider? { get set }
 
     var components: DateComponents { get }
@@ -67,32 +67,34 @@ public struct Day: DayProtcol {
     }
 }
 
-// Implement Comparable
-public extension Day {
-    static func < (lhs: Day, rhs: Day) -> Bool {
+// MARK: Comparable
+
+extension Day: Comparable {
+    public static func < (lhs: Day, rhs: Day) -> Bool {
         lhs._dayComponents < rhs._dayComponents
     }
 
-    static func > (lhs: Day, rhs: Day) -> Bool {
+    public static func > (lhs: Day, rhs: Day) -> Bool {
         lhs._dayComponents > rhs._dayComponents
     }
 
-    static func == (lhs: Day, rhs: Day) -> Bool {
+    public static func == (lhs: Day, rhs: Day) -> Bool {
         lhs._dayComponents == rhs._dayComponents
     }
 
-    static func >= (lhs: Day, rhs: Day) -> Bool {
+    public static func >= (lhs: Day, rhs: Day) -> Bool {
         lhs == rhs || lhs > rhs
     }
 
-    static func <= (lhs: Day, rhs: Day) -> Bool {
+    public static func <= (lhs: Day, rhs: Day) -> Bool {
         lhs == rhs || lhs < rhs
     }
 }
 
-/// Explicitly implement Hashable
-public extension Day {
-    func hash(into hasher: inout Hasher) {
+// MARK: Hashable
+
+extension Day: Hashable {
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(day)
         hasher.combine(month)
         hasher.combine(isEnabled)
