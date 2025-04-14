@@ -20,7 +20,7 @@ import CoreGraphics
 /// the background around the month's foreground views.
 public struct MonthLayoutContext: Hashable {
     /// The month that this layout context describes.
-    public let month: MonthComponents
+    public let month: Month
 
     /// The frame of the month header in the coordinate system of `bounds`.
     public let monthHeaderFrame: CGRect

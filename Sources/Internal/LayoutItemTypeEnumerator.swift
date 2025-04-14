@@ -137,7 +137,7 @@ final class LayoutItemTypeEnumerator {
     }
   }
 
-  private func firstDayInRange(in month: Month) -> Day {
+  private func firstDayInRange(in month: MonthAlias) -> Day {
     let firstDate = calendar.firstDate(of: month)
     let firstDay = calendar.day(containing: firstDate)
 

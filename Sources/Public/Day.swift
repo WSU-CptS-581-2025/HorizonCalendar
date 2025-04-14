@@ -27,7 +27,7 @@ public protocol DayProtcol: Hashable, Comparable {
 
     var components: DateComponents { get }
 
-    var month: MonthComponents { get }
+    var month: Month { get }
 
     var day: Int { get }
 
@@ -51,7 +51,7 @@ public struct Day: DayProtcol {
         _dayComponents.components
     }
 
-    public var month: MonthComponents {
+    public var month: Month {
         _dayComponents.month
     }
 
@@ -61,7 +61,7 @@ public struct Day: DayProtcol {
 
     public var isEnabled: Bool
 
-    init(month: MonthComponents, day: Int) {
+    init(month: Month, day: Int) {
         _dayComponents = DayComponents(month: month, day: day)
         isEnabled = Day.availabilityProvider?.isEnabled(_dayComponents) ?? true
     }

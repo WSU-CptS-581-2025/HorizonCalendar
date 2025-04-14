@@ -215,7 +215,7 @@ public final class CalendarViewContent {
     ///   - month: The `Month` for which to provide a month header item.
     /// - Returns: A mutated `CalendarViewContent` instance with a new month header item provider.
     public func monthHeaderItemProvider(
-        _ monthHeaderItemProvider: @escaping (_ month: MonthComponents) -> AnyCalendarItemModel?)
+        _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItemModel?)
         -> CalendarViewContent
     {
         self.monthHeaderItemProvider = { [defaultMonthHeaderItemProvider] month in
@@ -248,7 +248,7 @@ public final class CalendarViewContent {
     /// - Returns: A mutated `CalendarViewContent` instance with a new day-of-week item provider.
     public func dayOfWeekItemProvider(
         _ dayOfWeekItemProvider: @escaping (
-            _ month: MonthComponents?,
+            _ month: Month?,
             _ weekdayIndex: Int
         )
             -> AnyCalendarItemModel?)
@@ -435,9 +435,9 @@ public final class CalendarViewContent {
     private(set) var horizontalDayMargin: CGFloat = 0
     private(set) var daysOfTheWeekRowSeparatorOptions: DaysOfTheWeekRowSeparatorOptions?
 
-    private(set) var monthHeaderItemProvider: (Month) -> AnyCalendarItemModel
+    private(set) var monthHeaderItemProvider: (MonthAlias) -> AnyCalendarItemModel
     private(set) var dayOfWeekItemProvider: (
-        _ month: Month?,
+        _ month: MonthAlias?,
         _ weekdayIndex: Int
     )
         -> AnyCalendarItemModel
@@ -460,7 +460,7 @@ public final class CalendarViewContent {
 
     /// The default `monthHeaderItemProvider` if no provider has been configured,
     /// or if the existing provider returns nil.
-    private lazy var defaultMonthHeaderItemProvider: (Month) -> AnyCalendarItemModel = { [
+    private lazy var defaultMonthHeaderItemProvider: (MonthAlias) -> AnyCalendarItemModel = { [
         calendar,
         monthHeaderDateFormatter
     ] month in
@@ -475,7 +475,7 @@ public final class CalendarViewContent {
 
     /// The default `dayHeaderItemProvider` if no provider has been configured,
     /// or if the existing provider returns nil.
-    private lazy var defaultDayOfWeekItemProvider: (Month?, Int)
+    private lazy var defaultDayOfWeekItemProvider: (MonthAlias?, Int)
         -> AnyCalendarItemModel = { [monthHeaderDateFormatter] _, weekdayIndex in
             let dayOfWeekText = monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[weekdayIndex]
             let itemModel = DayOfWeekView.calendarItemModel(

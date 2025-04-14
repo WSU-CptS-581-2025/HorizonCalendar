@@ -29,9 +29,9 @@ final class SubviewInsertionIndexTrackerTests: XCTestCase {
       .pinnedDaysOfWeekRowBackground,
       .overlayItem(.monthHeader(monthContainingDate: Date())),
       .daysOfWeekRowSeparator(
-        Month(era: 1, year: 2022, month: 1, isInGregorianCalendar: true)),
+        MonthAlias(era: 1, year: 2022, month: 1, isInGregorianCalendar: true)),
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2022, month: 1, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2022, month: 1, isInGregorianCalendar: true))),
       .dayRange(.init(containing: Date()...Date(), in: .current)),
     ]
 
@@ -48,57 +48,57 @@ final class SubviewInsertionIndexTrackerTests: XCTestCase {
   func testCorrectSubviewsOrderManyItems() throws {
     let itemTypesToInsert: [VisibleItem.ItemType] = [
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2022, month: 1, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2022, month: 1, isInGregorianCalendar: true))),
       .dayRange(.init(containing: Date()...Date(), in: .current)),
       .dayRange(.init(containing: Date()...Date(), in: .current)),
       .dayRange(.init(containing: Date()...Date(), in: .current)),
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2022, month: 2, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2022, month: 2, isInGregorianCalendar: true))),
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2022, month: 3, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2022, month: 3, isInGregorianCalendar: true))),
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2022, month: 4, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2022, month: 4, isInGregorianCalendar: true))),
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2022, month: 5, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2022, month: 5, isInGregorianCalendar: true))),
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2022, month: 6, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2022, month: 6, isInGregorianCalendar: true))),
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2022, month: 7, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2022, month: 7, isInGregorianCalendar: true))),
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2022, month: 8, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2022, month: 8, isInGregorianCalendar: true))),
       .overlayItem(.monthHeader(monthContainingDate: Date())),
       .pinnedDaysOfWeekRowBackground,
       .dayRange(.init(containing: Date()...Date(), in: .current)),
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2022, month: 9, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2022, month: 9, isInGregorianCalendar: true))),
       .pinnedDayOfWeek(.first),
       .pinnedDayOfWeek(.second),
       .daysOfWeekRowSeparator(
-        Month(era: 1, year: 2022, month: 1, isInGregorianCalendar: true)),
+        MonthAlias(era: 1, year: 2022, month: 1, isInGregorianCalendar: true)),
       .pinnedDayOfWeek(.third),
       .pinnedDaysOfWeekRowSeparator,
       .pinnedDayOfWeek(.fourth),
       .pinnedDayOfWeek(.fifth),
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2022, month: 10, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2022, month: 10, isInGregorianCalendar: true))),
       .pinnedDayOfWeek(.sixth),
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2022, month: 11, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2022, month: 11, isInGregorianCalendar: true))),
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2022, month: 12, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2022, month: 12, isInGregorianCalendar: true))),
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2022, month: 1, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2022, month: 1, isInGregorianCalendar: true))),
       .dayRange(.init(containing: Date()...Date(), in: .current)),
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2023, month: 1, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2023, month: 1, isInGregorianCalendar: true))),
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2023, month: 2, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2023, month: 2, isInGregorianCalendar: true))),
       .daysOfWeekRowSeparator(
-        Month(era: 1, year: 2023, month: 1, isInGregorianCalendar: true)),
+        MonthAlias(era: 1, year: 2023, month: 1, isInGregorianCalendar: true)),
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2023, month: 3, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2023, month: 3, isInGregorianCalendar: true))),
       .layoutItemType(
-        .monthHeader(Month(era: 1, year: 2023, month: 4, isInGregorianCalendar: true))),
+        .monthHeader(MonthAlias(era: 1, year: 2023, month: 4, isInGregorianCalendar: true))),
       .pinnedDayOfWeek(.last),
     ]
 

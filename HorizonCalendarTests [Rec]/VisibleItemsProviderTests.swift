@@ -28,7 +28,7 @@ final class VisibleItemsProviderTests: XCTestCase {
 
   func testVerticalInitialVisibleMonthHeader() {
     let monthHeaderItem1 = verticalVisibleItemsProvider.anchorMonthHeaderItem(
-      for: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
+      for: MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 100),
       scrollPosition: .firstFullyVisiblePosition)
     XCTAssert(
@@ -36,7 +36,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected initial month header item.")
 
     let monthHeaderItem2 = verticalVisibleItemsProvider.anchorMonthHeaderItem(
-      for: Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true),
+      for: MonthAlias(era: 1, year: 2020, month: 03, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 250),
       scrollPosition: .lastFullyVisiblePosition)
     XCTAssert(
@@ -44,7 +44,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected initial month header item.")
 
     let monthHeaderItem3 = verticalVisibleItemsProvider.anchorMonthHeaderItem(
-      for: Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true),
+      for: MonthAlias(era: 1, year: 2020, month: 06, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 400),
       scrollPosition: .centered)
     XCTAssert(
@@ -54,7 +54,7 @@ final class VisibleItemsProviderTests: XCTestCase {
 
   func testVerticalPinnedDaysOfWeekInitialVisibleMonthHeader() {
     let monthHeaderItem1 = verticalPinnedDaysOfWeekVisibleItemsProvider.anchorMonthHeaderItem(
-      for: Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
+      for: MonthAlias(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 190),
       scrollPosition: .firstFullyVisiblePosition)
     XCTAssert(
@@ -62,7 +62,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected initial month header item.")
 
     let monthHeaderItem2 = verticalPinnedDaysOfWeekVisibleItemsProvider.anchorMonthHeaderItem(
-      for: Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true),
+      for: MonthAlias(era: 1, year: 2020, month: 03, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 200),
       scrollPosition: .lastFullyVisiblePosition)
     XCTAssert(
@@ -70,7 +70,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected initial month header item.")
 
     let monthHeaderItem3 = verticalPinnedDaysOfWeekVisibleItemsProvider.anchorMonthHeaderItem(
-      for: Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true),
+      for: MonthAlias(era: 1, year: 2020, month: 04, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 250),
       scrollPosition: .centered)
     XCTAssert(
@@ -80,7 +80,7 @@ final class VisibleItemsProviderTests: XCTestCase {
 
   func testVerticalPartialMonthVisibleMonthHeader() {
     let monthHeaderItem1 = verticalPartialMonthVisibleItemsProvider.anchorMonthHeaderItem(
-      for: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
+      for: MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 100),
       scrollPosition: .firstFullyVisiblePosition)
     XCTAssert(
@@ -88,7 +88,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected initial month header item.")
 
     let monthHeaderItem2 = verticalPartialMonthVisibleItemsProvider.anchorMonthHeaderItem(
-      for: Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true),
+      for: MonthAlias(era: 1, year: 2020, month: 03, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 250),
       scrollPosition: .lastFullyVisiblePosition)
     XCTAssert(
@@ -96,7 +96,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected initial month header item.")
 
     let monthHeaderItem3 = verticalPartialMonthVisibleItemsProvider.anchorMonthHeaderItem(
-      for: Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true),
+      for: MonthAlias(era: 1, year: 2020, month: 06, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 400),
       scrollPosition: .centered)
     XCTAssert(
@@ -106,7 +106,7 @@ final class VisibleItemsProviderTests: XCTestCase {
 
   func testHorizontalInitialVisibleMonthHeader() {
     let monthHeaderItem1 = horizontalVisibleItemsProvider.anchorMonthHeaderItem(
-      for: Month(era: 1, year: 2020, month: 11, isInGregorianCalendar: true),
+      for: MonthAlias(era: 1, year: 2020, month: 11, isInGregorianCalendar: true),
       offset: CGPoint(x: 1000, y: 0),
       scrollPosition: .firstFullyVisiblePosition)
     XCTAssert(
@@ -114,7 +114,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected initial month header item.")
 
     let monthHeaderItem2 = horizontalVisibleItemsProvider.anchorMonthHeaderItem(
-      for: Month(era: 1, year: 2020, month: 09, isInGregorianCalendar: true),
+      for: MonthAlias(era: 1, year: 2020, month: 09, isInGregorianCalendar: true),
       offset: CGPoint(x: 800, y: 0),
       scrollPosition: .lastFullyVisiblePosition)
     XCTAssert(
@@ -122,7 +122,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected initial month header item.")
 
     let monthHeaderItem3 = horizontalVisibleItemsProvider.anchorMonthHeaderItem(
-      for: Month(era: 1, year: 2020, month: 10, isInGregorianCalendar: true),
+      for: MonthAlias(era: 1, year: 2020, month: 10, isInGregorianCalendar: true),
       offset: CGPoint(x: 500, y: 0),
       scrollPosition: .centered)
     XCTAssert(
@@ -131,7 +131,7 @@ final class VisibleItemsProviderTests: XCTestCase {
   }
 
   func testVerticalInitialVisibleDay() {
-    let day = Day(month: Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true), day: 20)
+    let day = Day(month: MonthAlias(era: 1, year: 2020, month: 04, isInGregorianCalendar: true), day: 20)
 
     let dayItem1 = verticalVisibleItemsProvider.anchorDayItem(
       for: day,
@@ -160,7 +160,7 @@ final class VisibleItemsProviderTests: XCTestCase {
 
   func testInitialVisiblePositionsNeedingCorrection() {
     let dayItem1 = verticalVisibleItemsProvider.anchorDayItem(
-      for: Day(month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), day: 01),
+      for: Day(month: MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), day: 01),
       offset: CGPoint(x: 0, y: 400),
       scrollPosition: .lastFullyVisiblePosition)
     XCTAssert(
@@ -168,7 +168,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected initial day item.")
 
     let dayItem2 = verticalVisibleItemsProvider.anchorDayItem(
-      for: Day(month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true), day: 31),
+      for: Day(month: MonthAlias(era: 1, year: 2020, month: 12, isInGregorianCalendar: true), day: 31),
       offset: CGPoint(x: 0, y: 200),
       scrollPosition: .firstFullyVisiblePosition)
     XCTAssert(
@@ -176,7 +176,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected initial day item.")
 
     let dayItem3 = verticalPinnedDaysOfWeekVisibleItemsProvider.anchorDayItem(
-      for: Day(month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true), day: 31),
+      for: Day(month: MonthAlias(era: 1, year: 2020, month: 12, isInGregorianCalendar: true), day: 31),
       offset: CGPoint(x: 0, y: 200),
       scrollPosition: .centered)
     XCTAssert(
@@ -184,7 +184,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected initial day item.")
 
     let dayItem4 = horizontalVisibleItemsProvider.anchorDayItem(
-      for: Day(month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), day: 01),
+      for: Day(month: MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), day: 01),
       offset: CGPoint(x: 600, y: 0),
       scrollPosition: .lastFullyVisiblePosition)
     XCTAssert(
@@ -192,7 +192,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected initial day item.")
 
     let dayItem5 = horizontalVisibleItemsProvider.anchorDayItem(
-      for: Day(month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true), day: 28),
+      for: Day(month: MonthAlias(era: 1, year: 2020, month: 12, isInGregorianCalendar: true), day: 28),
       offset: CGPoint(x: 100, y: 0),
       scrollPosition: .firstFullyVisiblePosition)
     XCTAssert(
@@ -201,7 +201,7 @@ final class VisibleItemsProviderTests: XCTestCase {
   }
 
   func testVerticalPinnedDaysOfWeekInitialVisibleDay() {
-    let day = Day(month: Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true), day: 20)
+    let day = Day(month: MonthAlias(era: 1, year: 2020, month: 04, isInGregorianCalendar: true), day: 20)
 
     let dayItem1 = verticalPinnedDaysOfWeekVisibleItemsProvider.anchorDayItem(
       for: day,
@@ -229,7 +229,7 @@ final class VisibleItemsProviderTests: XCTestCase {
   }
 
   func testVerticalPartialMonthInitialVisibleDay() {
-    let day = Day(month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), day: 28)
+    let day = Day(month: MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), day: 28)
 
     let dayItem1 = verticalPartialMonthVisibleItemsProvider.anchorDayItem(
       for: day,
@@ -257,7 +257,7 @@ final class VisibleItemsProviderTests: XCTestCase {
   }
 
   func testHorizontalInitialVisibleDay() {
-    let day = Day(month: Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true), day: 20)
+    let day = Day(month: MonthAlias(era: 1, year: 2020, month: 04, isInGregorianCalendar: true), day: 20)
 
     let dayItem1 = horizontalVisibleItemsProvider.anchorDayItem(
       for: day,
@@ -289,7 +289,7 @@ final class VisibleItemsProviderTests: XCTestCase {
   func testVisibleItemsContextAfterMetricsChange() {
     let anchorLayoutItem = verticalVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
-        itemType: .monthHeader(Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true)),
+        itemType: .monthHeader(MonthAlias(era: 1, year: 2020, month: 03, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 200, width: 320, height: 50)),
       offset: CGPoint(x: 0, y: 150),
       extendLayoutRegion: false)
@@ -388,7 +388,7 @@ final class VisibleItemsProviderTests: XCTestCase {
   func testVerticalVisibleItemsContext() {
     let details = verticalVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
-        itemType: .monthHeader(Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true)),
+        itemType: .monthHeader(MonthAlias(era: 1, year: 2020, month: 03, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 200, width: 320, height: 50)),
       offset: CGPoint(x: 0, y: 150),
       extendLayoutRegion: false)
@@ -474,7 +474,7 @@ final class VisibleItemsProviderTests: XCTestCase {
   func testVerticalPinnedDaysOfWeekVisibleItemsContext() {
     let details = verticalPinnedDaysOfWeekVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
-        itemType: .monthHeader(Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true)),
+        itemType: .monthHeader(MonthAlias(era: 1, year: 2020, month: 06, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 450, width: 320, height: 40)),
       offset: CGPoint(x: 0, y: 450),
       extendLayoutRegion: false)
@@ -554,7 +554,7 @@ final class VisibleItemsProviderTests: XCTestCase {
   func testVerticalPartialMonthVisibleItemsContext() {
     let details = verticalPartialMonthVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
-        itemType: .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
+        itemType: .monthHeader(MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 200, width: 320, height: 50)),
       offset: CGPoint(x: 0, y: 150),
       extendLayoutRegion: false)
@@ -606,7 +606,7 @@ final class VisibleItemsProviderTests: XCTestCase {
   func testHorizontalVisibleItemsContext() {
     let details = horizontalVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
-        itemType: .monthHeader(Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true)),
+        itemType: .monthHeader(MonthAlias(era: 1, year: 2020, month: 05, isInGregorianCalendar: true)),
         frame: CGRect(x: 250, y: 0, width: 300, height: 50)),
       offset: CGPoint(x: 100, y: 0),
       extendLayoutRegion: false)
@@ -692,7 +692,7 @@ final class VisibleItemsProviderTests: XCTestCase {
   func testLargeScrollOffsetSincePreviouslyVisibleItem() {
     let details = verticalVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
-        itemType: .monthHeader(Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        itemType: .monthHeader(MonthAlias(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 3000, width: 320, height: 50)),
       offset: CGPoint(x: 0, y: 150),
       extendLayoutRegion: false)
@@ -774,7 +774,7 @@ final class VisibleItemsProviderTests: XCTestCase {
   func testHorizontalLeadingMonthPartiallyClipped() {
     let details = horizontalVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
-        itemType: .monthHeader(Month(era: 1, year: 2020, month: 2, isInGregorianCalendar: true)),
+        itemType: .monthHeader(MonthAlias(era: 1, year: 2020, month: 2, isInGregorianCalendar: true)),
         frame: CGRect(x: 315, y: 0, width: 300, height: 50)),
       offset: CGPoint(x: 295, y: 0),
       extendLayoutRegion: false)
@@ -843,7 +843,7 @@ final class VisibleItemsProviderTests: XCTestCase {
   func testBoundaryVerticalVisibleItemsContext() {
     let details = verticalVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
-        itemType: .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
+        itemType: .monthHeader(MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 0, width: 320, height: 50)),
       offset: CGPoint(x: 0, y: -50),
       extendLayoutRegion: false)
@@ -921,7 +921,7 @@ final class VisibleItemsProviderTests: XCTestCase {
   func testBoundaryVerticalPinnedDaysOfWeekVisibleItemsContext() {
     let details = verticalPinnedDaysOfWeekVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
-        itemType: .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
+        itemType: .monthHeader(MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 45, width: 320, height: 40)),
       offset: CGPoint(x: 0, y: 50),
       extendLayoutRegion: false)
@@ -1002,7 +1002,7 @@ final class VisibleItemsProviderTests: XCTestCase {
   func testBoundaryVerticalPartialMonthVisibleItemsContext() {
     let details = verticalPartialMonthVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
-        itemType: .monthHeader(Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        itemType: .monthHeader(MonthAlias(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 690, width: 320, height: 50)),
       offset: CGPoint(x: 0, y: 690),
       extendLayoutRegion: false)
@@ -1040,7 +1040,7 @@ final class VisibleItemsProviderTests: XCTestCase {
   func testBoundaryHorizontalVisibleItemsContext() {
     let details = horizontalVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
-        itemType: .monthHeader(Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        itemType: .monthHeader(MonthAlias(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
         frame: CGRect(x: 1200, y: 0, width: 300, height: 50)),
       offset: CGPoint(x: 1000, y: 0),
       extendLayoutRegion: false)
@@ -1124,7 +1124,7 @@ final class VisibleItemsProviderTests: XCTestCase {
   func testVerticalVisibleItemsForAnimatedUpdatePass() {
     let details = verticalPinnedDaysOfWeekVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
-        itemType: .monthHeader(Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true)),
+        itemType: .monthHeader(MonthAlias(era: 1, year: 2020, month: 06, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 450, width: 320, height: 40)),
       offset: CGPoint(x: 0, y: 450),
       extendLayoutRegion: true)
@@ -1311,7 +1311,7 @@ final class VisibleItemsProviderTests: XCTestCase {
   func testHorizontalVisibleItemsForAnimatedUpdatePass() {
     let details = horizontalVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
-        itemType: .monthHeader(Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true)),
+        itemType: .monthHeader(MonthAlias(era: 1, year: 2020, month: 05, isInGregorianCalendar: true)),
         frame: CGRect(x: 250, y: 0, width: 300, height: 50)),
       offset: CGPoint(x: 100, y: 0),
       extendLayoutRegion: true)
@@ -1490,10 +1490,10 @@ final class VisibleItemsProviderTests: XCTestCase {
   private static let dateRange = ClosedRange(
     uncheckedBounds: (
       lower: calendar.startDate(
-        of: Day(month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), day: 25)),
+        of: Day(month: MonthAlias(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), day: 25)),
       upper: calendar.startDate(
         of: Day(
-          month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true),
+          month: MonthAlias(era: 1, year: 2020, month: 12, isInGregorianCalendar: true),
           day: 01))))
 
   private static let size = CGSize(width: 320, height: 480)

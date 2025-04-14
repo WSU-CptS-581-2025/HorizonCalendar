@@ -28,8 +28,8 @@ final class WeekNumberTests: XCTestCase {
   }
   
   // A month that's guaranteed to be in our date range
-  private var testMonth: Month {
-    return Month(era: 1, year: 2023, month: 1, isInGregorianCalendar: true)
+  private var testMonth: MonthAlias {
+    return MonthAlias(era: 1, year: 2023, month: 1, isInGregorianCalendar: true)
   }
   
   // MARK: - Tests
@@ -127,7 +127,7 @@ final class WeekNumberTests: XCTestCase {
       extendLayoutRegion: true)
       
     // Find items with weekNumber type
-    let weekNumberItems = details.visibleItems.compactMap { item -> (Int, Month)? in
+    let weekNumberItems = details.visibleItems.compactMap { item -> (Int, MonthAlias)? in
       if case .weekNumber(let weekNumber, let month) = item.itemType {
         return (weekNumber, month)
       }

@@ -18,7 +18,7 @@ import Foundation
 // MARK: - DayComponents
 
 public protocol DayComponentsProtocol: Hashable {
-    var month: MonthComponents { get }
+    var month: Month { get }
     var day: Int { get }
 }
 
@@ -29,14 +29,14 @@ public protocol DayComponentsProtocol: Hashable {
 public struct DayComponents: DayComponentsProtocol {
     // MARK: Lifecycle
 
-    init(month: MonthComponents, day: Int) {
+    init(month: Month, day: Int) {
         self.month = month
         self.day = day
     }
 
     public init(date: Date) {
         let comps = Calendar.current.dateComponents([.era, .year, .month, .day], from: date)
-        month = Month(era: comps.era!,
+        month = MonthAlias(era: comps.era!,
                       year: comps.year!,
                       month: comps.month!,
                       isInGregorianCalendar: Calendar.current.identifier == .gregorian)
@@ -45,7 +45,7 @@ public struct DayComponents: DayComponentsProtocol {
 
     // MARK: Public
 
-    public let month: MonthComponents
+    public let month: Month
     public let day: Int
 
     public var components: DateComponents {
