@@ -435,9 +435,9 @@ public final class CalendarViewContent {
     private(set) var horizontalDayMargin: CGFloat = 0
     private(set) var daysOfTheWeekRowSeparatorOptions: DaysOfTheWeekRowSeparatorOptions?
 
-    private(set) var monthHeaderItemProvider: (MonthAlias) -> AnyCalendarItemModel
+    private(set) var monthHeaderItemProvider: (Month) -> AnyCalendarItemModel
     private(set) var dayOfWeekItemProvider: (
-        _ month: MonthAlias?,
+        _ month: Month?,
         _ weekdayIndex: Int
     )
         -> AnyCalendarItemModel
@@ -460,7 +460,7 @@ public final class CalendarViewContent {
 
     /// The default `monthHeaderItemProvider` if no provider has been configured,
     /// or if the existing provider returns nil.
-    private lazy var defaultMonthHeaderItemProvider: (MonthAlias) -> AnyCalendarItemModel = { [
+    private lazy var defaultMonthHeaderItemProvider: (Month) -> AnyCalendarItemModel = { [
         calendar,
         monthHeaderDateFormatter
     ] month in
@@ -475,7 +475,7 @@ public final class CalendarViewContent {
 
     /// The default `dayHeaderItemProvider` if no provider has been configured,
     /// or if the existing provider returns nil.
-    private lazy var defaultDayOfWeekItemProvider: (MonthAlias?, Int)
+    private lazy var defaultDayOfWeekItemProvider: (Month?, Int)
         -> AnyCalendarItemModel = { [monthHeaderDateFormatter] _, weekdayIndex in
             let dayOfWeekText = monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[weekdayIndex]
             let itemModel = DayOfWeekView.calendarItemModel(

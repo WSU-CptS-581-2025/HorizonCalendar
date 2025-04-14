@@ -28,7 +28,7 @@ struct ScrollToItemContext {
 extension ScrollToItemContext {
 
   enum TargetItem {
-    case month(MonthAlias)
+    case month(Month)
     case day(Day)
   }
 
