@@ -67,25 +67,26 @@ public struct Day: DayProtcol {
     }
 }
 
-// Implement Comparable
-public extension Day {
-    static func < (lhs: Day, rhs: Day) -> Bool {
+// MARK: Comparable
+
+extension Day: Comparable {
+    public static func < (lhs: Day, rhs: Day) -> Bool {
         lhs._dayComponents < rhs._dayComponents
     }
 
-    static func > (lhs: Day, rhs: Day) -> Bool {
+    public static func > (lhs: Day, rhs: Day) -> Bool {
         lhs._dayComponents > rhs._dayComponents
     }
 
-    static func == (lhs: Day, rhs: Day) -> Bool {
+    public static func == (lhs: Day, rhs: Day) -> Bool {
         lhs._dayComponents == rhs._dayComponents
     }
 
-    static func >= (lhs: Day, rhs: Day) -> Bool {
+    public static func >= (lhs: Day, rhs: Day) -> Bool {
         lhs == rhs || lhs > rhs
     }
 
-    static func <= (lhs: Day, rhs: Day) -> Bool {
+    public static func <= (lhs: Day, rhs: Day) -> Bool {
         lhs == rhs || lhs < rhs
     }
 }
