@@ -22,7 +22,7 @@ public protocol DayAvailabilityProvider {
     func isEnabled(_ day: Date) -> Bool
 }
 
-public protocol DayProtcol: Hashable, Comparable {
+public protocol DayProtcol: Hashable, Comparable, CustomStringConvertible {
     static var availabilityProvider: DayAvailabilityProvider? { get set }
 
     var components: DateComponents { get }
