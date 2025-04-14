@@ -29,11 +29,11 @@ extension LayoutItem {
 
   enum ItemType: Equatable, Hashable {
 
-    case monthHeader(MonthAlias)
-    case dayOfWeekInMonth(position: DayOfWeekPosition, month: MonthAlias)
+    case monthHeader(Month)
+    case dayOfWeekInMonth(position: DayOfWeekPosition, month: Month)
     case day(Day)
 
-    var month: MonthAlias {
+    var month: Month {
       switch self {
       case .monthHeader(let month): return month
       case .dayOfWeekInMonth(_, let month): return month

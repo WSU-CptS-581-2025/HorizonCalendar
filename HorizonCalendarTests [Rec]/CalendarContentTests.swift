@@ -31,7 +31,7 @@ final class CalendarContentTests: XCTestCase {
       visibleDateRange: Date.distantPast...Date.distantFuture,
       monthsLayout: .vertical)
 
-    let day = Day(month: MonthAlias(era: 1, year: 2023, month: 1, isInGregorianCalendar: true), day: 1)
+    let day = Day(month: Month(era: 1, year: 2023, month: 1, isInGregorianCalendar: true), day: 1)
     let defaultDayItem = content.dayItemProvider(day)
 
     let contentWithNilDayItem = content.dayItemProvider { _ in nil }
@@ -45,7 +45,7 @@ final class CalendarContentTests: XCTestCase {
       visibleDateRange: Date.distantPast...Date.distantFuture,
       monthsLayout: .vertical)
 
-    let month = MonthAlias(era: 1, year: 2023, month: 1, isInGregorianCalendar: true)
+    let month = Month(era: 1, year: 2023, month: 1, isInGregorianCalendar: true)
     let defaultDayOfWeekItem = content.dayOfWeekItemProvider(month, 1)
 
     let contentWithNilDayOfWeekItem = content.dayOfWeekItemProvider { _, _ in nil }
@@ -59,7 +59,7 @@ final class CalendarContentTests: XCTestCase {
       visibleDateRange: Date.distantPast...Date.distantFuture,
       monthsLayout: .vertical)
 
-    let month = MonthAlias(era: 1, year: 2023, month: 1, isInGregorianCalendar: true)
+    let month = Month(era: 1, year: 2023, month: 1, isInGregorianCalendar: true)
     let defaultMonthHeaderItem = content.monthHeaderItemProvider(month)
 
     let contentWithNilMonthHeaderItem = content.monthHeaderItemProvider { _ in nil }
@@ -76,12 +76,12 @@ final class CalendarContentTests: XCTestCase {
 /// and can be abstracted behind a single protocol
 protocol CalendarContentConfigurable {
   func monthHeaderItemProvider(
-    _ monthHeaderItemProvider: @escaping (_ month: MonthAlias) -> AnyCalendarItemModel?)
+    _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItemModel?)
     -> Self
 
   func dayOfWeekItemProvider(
     _ dayOfWeekItemProvider: @escaping (
-      _ month: MonthAlias?,
+      _ month: Month?,
       _ weekdayIndex: Int)
       -> AnyCalendarItemModel?)
     -> Self

@@ -19,15 +19,15 @@ import Foundation
 
 extension Calendar {
 
-  func month(containing date: Date) -> MonthAlias {
-    MonthAlias(
+  func month(containing date: Date) -> Month {
+    Month(
       era: component(.era, from: date),
       year: component(.year, from: date),
       month: component(.month, from: date),
       isInGregorianCalendar: identifier == .gregorian)
   }
 
-  func firstDate(of month: MonthAlias) -> Date {
+  func firstDate(of month: Month) -> Date {
     guard let firstDate = date(from: month.components) else {
       preconditionFailure("Failed to create a `Date` representing the first day of \(month).")
     }
@@ -35,7 +35,7 @@ extension Calendar {
     return firstDate
   }
 
-  func lastDate(of month: MonthAlias) -> Date {
+  func lastDate(of month: Month) -> Date {
     let firstDate = firstDate(of: month)
     guard let numberOfDaysInMonth = range(of: .day, in: .month, for: firstDate)?.count else {
       preconditionFailure("Could not get number of days in month from \(firstDate).")
@@ -53,7 +53,7 @@ extension Calendar {
     return lastDate
   }
 
-  func month(byAddingMonths numberOfMonths: Int, to month: MonthAlias) -> MonthAlias {
+  func month(byAddingMonths numberOfMonths: Int, to month: Month) -> Month {
     guard
       let firstDateOfNextMonth = date(
         byAdding: .month,
@@ -73,7 +73,7 @@ extension Calendar {
 extension Calendar {
 
   func day(containing date: Date) -> Day {
-    let month = MonthAlias(
+    let month = Month(
       era: component(.era, from: date),
       year: component(.year, from: date),
       month: component(.month, from: date),
@@ -140,7 +140,7 @@ extension Calendar {
   // the minimum days requirement for the first week in some locales).
   func rowInMonth(for date: Date) -> Int {
     let firstDateOfMonth = firstDate(
-      of: MonthAlias(
+      of: Month(
         era: component(.era, from: date),
         year: component(.year, from: date),
         month: component(.month, from: date),

@@ -81,11 +81,11 @@ extension VisibleItem {
   enum ItemType: Equatable, Hashable {
     case layoutItemType(LayoutItem.ItemType)
     case dayBackground(Day)
-    case monthBackground(MonthAlias)
+    case monthBackground(Month)
     case pinnedDayOfWeek(DayOfWeekPosition)
     case pinnedDaysOfWeekRowBackground
     case pinnedDaysOfWeekRowSeparator
-    case daysOfWeekRowSeparator(MonthAlias)
+    case daysOfWeekRowSeparator(Month)
     case dayRange(DayRange)
     case overlayItem(OverlaidItemLocation)
     case weekNumber(weekNumber: Int, month: Month)

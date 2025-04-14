@@ -23,8 +23,8 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
   // MARK: Internal
 
   override func setUp() {
-    let lowerBoundMonth = MonthAlias(era: 1, year: 2020, month: 11, isInGregorianCalendar: true)
-    let upperBoundMonth = MonthAlias(era: 1, year: 2021, month: 1, isInGregorianCalendar: true)
+    let lowerBoundMonth = Month(era: 1, year: 2020, month: 11, isInGregorianCalendar: true)
+    let upperBoundMonth = Month(era: 1, year: 2021, month: 1, isInGregorianCalendar: true)
     let monthRange = lowerBoundMonth...upperBoundMonth
 
     let lowerBoundDay = Day(month: lowerBoundMonth, day: 12)
@@ -51,25 +51,25 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
     expectedItemTypeStackBackwards = [
       .dayOfWeekInMonth(
         position: .last,
-        month: MonthAlias(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
-        position: .sixth, month: MonthAlias(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        position: .sixth, month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
         position: .fifth,
-        month: MonthAlias(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
         position: .fourth,
-        month: MonthAlias(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
         position: .third,
-        month: MonthAlias(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
         position: .second,
-        month: MonthAlias(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
         position: .first,
-        month: MonthAlias(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
-      .monthHeader(MonthAlias(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+      .monthHeader(Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
       .day(calendar.day(byAddingDays: -1, to: startDay)),
       .day(calendar.day(byAddingDays: -2, to: startDay)),
       .day(calendar.day(byAddingDays: -3, to: startDay)),
@@ -123,28 +123,28 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
       .day(calendar.day(byAddingDays: 28, to: startDay)),
       .day(calendar.day(byAddingDays: 29, to: startDay)),
       .day(calendar.day(byAddingDays: 30, to: startDay)),
-      .monthHeader(MonthAlias(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
+      .monthHeader(Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
         position: .first,
-        month: MonthAlias(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
         position: .second,
-        month: MonthAlias(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
         position: .third,
-        month: MonthAlias(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
         position: .fourth,
-        month: MonthAlias(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
         position: .fifth,
-        month: MonthAlias(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
         position: .sixth,
-        month: MonthAlias(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
         position: .last,
-        month: MonthAlias(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
       .day(calendar.day(byAddingDays: 31, to: startDay)),
       .day(calendar.day(byAddingDays: 32, to: startDay)),
       .day(calendar.day(byAddingDays: 33, to: startDay)),
@@ -245,7 +245,7 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
 
   private let calendar = Calendar(identifier: .gregorian)
   private let startDay = Day(
-    month: MonthAlias(era: 1, year: 2020, month: 12, isInGregorianCalendar: true),
+    month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true),
     day: 1)
 
   // swiftlint:disable implicitly_unwrapped_optional
