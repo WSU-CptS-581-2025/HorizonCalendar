@@ -73,7 +73,8 @@ final class DemoPickerViewController: UIViewController {
       ("SwiftUI Disabled Day", SwiftUIDisabledDayDemoViewController.self),
       ("SwiftUI Week View", SwiftUIWeekViewViewController.self),
       ("SwiftUI Flexible Week View", SwiftUIFlexWeekViewController.self),
-      //("Holidays", HolidayCalendarViewController.self),
+      ("Holidays", HolidayCalendarViewController.self),
+      ("Colored Range Selection", ColoredDayRangeSelectionDemoViewController.self),
 
     ]
 
@@ -89,7 +90,9 @@ final class DemoPickerViewController: UIViewController {
       ("SwiftUI Screen", SwiftUIScreenDemoViewController.self),
       ("WeekdayView", WeekNumberDemoViewController.self),
       ("Weekday Only Calendar", WeekdayOnlyDemoViewController.self),
-      //("Holidays", HolidayCalendarViewController.self),
+      ("Holidays", HolidayCalendarViewController.self),
+      ("Colored Range Selection", ColoredDayRangeSelectionDemoViewController.self),
+
 
     ]
 
