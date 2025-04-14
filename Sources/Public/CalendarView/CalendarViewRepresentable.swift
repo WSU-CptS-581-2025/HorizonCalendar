@@ -99,10 +99,10 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
     fileprivate var horizontalDayMargin: CGFloat?
     fileprivate var daysOfTheWeekRowSeparatorOptions: DaysOfTheWeekRowSeparatorOptions?
 
-    fileprivate var monthHeaderItemProvider: ((MonthAlias) -> AnyCalendarItemModel?)?
+    fileprivate var monthHeaderItemProvider: ((Month) -> AnyCalendarItemModel?)?
     fileprivate var dayOfWeekItemProvider: (
         (
-            _ month: MonthAlias?,
+            _ month: Month?,
             _ weekdayIndex: Int
         )
             -> AnyCalendarItemModel?)?

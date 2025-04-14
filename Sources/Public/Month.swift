@@ -27,10 +27,6 @@ protocol MonthProtocol: Hashable, Comparable, CustomStringConvertible {
     var month: Int { get }
 }
 
-// MARK: - MonthAlias
-
-typealias MonthAlias = Month
-
 // MARK: - Month
 
 /// Represents the components of a month. This type is created internally, then vended to you via the public API. All

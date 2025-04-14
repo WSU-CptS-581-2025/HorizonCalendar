@@ -34,11 +34,11 @@ public extension CalendarView {
             return false
         }
 
-        let proposedTargetMonth: MonthAlias
+        let proposedTargetMonth: Month
         let scrollPosition: CalendarViewScrollPosition
         switch (direction, content.monthsLayout) {
         case (.up, .vertical), (.right, .horizontal):
-            proposedTargetMonth = MonthAlias(
+            proposedTargetMonth = Month(
                 era: lastVisibleMonth.era,
                 year: lastVisibleMonth.year,
                 month: lastVisibleMonth.month - numberOfVisibleMonths,
@@ -47,7 +47,7 @@ public extension CalendarView {
             scrollPosition = .lastFullyVisiblePosition
 
         case (.down, .vertical), (.left, .horizontal):
-            proposedTargetMonth = MonthAlias(
+            proposedTargetMonth = Month(
                 era: firstVisibleMonth.era,
                 year: firstVisibleMonth.year,
                 month: firstVisibleMonth.month + numberOfVisibleMonths,

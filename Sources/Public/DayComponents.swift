@@ -36,10 +36,10 @@ public struct DayComponents: DayComponentsProtocol {
 
     public init(date: Date) {
         let comps = Calendar.current.dateComponents([.era, .year, .month, .day], from: date)
-        month = MonthAlias(era: comps.era!,
-                           year: comps.year!,
-                           month: comps.month!,
-                           isInGregorianCalendar: Calendar.current.identifier == .gregorian)
+        month = Month(era: comps.era!,
+                      year: comps.year!,
+                      month: comps.month!,
+                      isInGregorianCalendar: Calendar.current.identifier == .gregorian)
         day = comps.day!
     }
 
