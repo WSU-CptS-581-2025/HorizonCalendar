@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		645FFEFC2D6D5E61002EE721 /* WeekdayOnlyDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFEFB2D6D5E61002EE721 /* WeekdayOnlyDemoViewController.swift */; };
 		645FFF022D73B86A002EE721 /* WeekNumberDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF012D73B86A002EE721 /* WeekNumberDemoViewController.swift */; };
+		652B72AE2DACBFCB00CEE5C2 /* HolidayCalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652B72AD2DACBFCB00CEE5C2 /* HolidayCalendarViewController.swift */; };
+		652B72B42DACC41C00CEE5C2 /* ColoredDayRangeSelectionDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652B72B32DACC41C00CEE5C2 /* ColoredDayRangeSelectionDemoViewController.swift */; };
 		9381769C249B74BB00E18FA3 /* DemoPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9381769B249B74BB00E18FA3 /* DemoPickerViewController.swift */; };
 		9381769F249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9381769E249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift */; };
 		938176A1249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938176A0249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift */; };
@@ -52,6 +54,8 @@
 /* Begin PBXFileReference section */
 		645FFEFB2D6D5E61002EE721 /* WeekdayOnlyDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekdayOnlyDemoViewController.swift; sourceTree = "<group>"; };
 		645FFF012D73B86A002EE721 /* WeekNumberDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekNumberDemoViewController.swift; sourceTree = "<group>"; };
+		652B72AD2DACBFCB00CEE5C2 /* HolidayCalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HolidayCalendarViewController.swift; sourceTree = "<group>"; };
+		652B72B32DACC41C00CEE5C2 /* ColoredDayRangeSelectionDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredDayRangeSelectionDemoViewController.swift; sourceTree = "<group>"; };
 		9381769B249B74BB00E18FA3 /* DemoPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoPickerViewController.swift; sourceTree = "<group>"; };
 		9381769E249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollToDayWithAnimationDemoViewController.swift; sourceTree = "<group>"; };
 		938176A0249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRangeSelectionDemoViewController.swift; sourceTree = "<group>"; };
@@ -94,6 +98,8 @@
 		9381769D249B79CB00E18FA3 /* Demo View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				652B72B32DACC41C00CEE5C2 /* ColoredDayRangeSelectionDemoViewController.swift */,
+				652B72AD2DACBFCB00CEE5C2 /* HolidayCalendarViewController.swift */,
 				938176A6249B85CE00E18FA3 /* DemoViewController.swift */,
 				645FFF012D73B86A002EE721 /* WeekNumberDemoViewController.swift */,
 				939E696E2484CD8E00A8BCC7 /* SingleDaySelectionDemoViewController.swift */,
@@ -227,7 +233,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				652B72B42DACC41C00CEE5C2 /* ColoredDayRangeSelectionDemoViewController.swift in Sources */,
 				93A7258E24A1F26C00B4F08F /* PartialMonthVisibilityDemoViewController.swift in Sources */,
+				652B72AE2DACBFCB00CEE5C2 /* HolidayCalendarViewController.swift in Sources */,
 				FDA0FB3728F5EFF60066DEFA /* SwiftUIItemModelsDemoViewController.swift in Sources */,
 				939E696F2484CD8E00A8BCC7 /* SingleDaySelectionDemoViewController.swift in Sources */,
 				938176A3249B7F0800E18FA3 /* SelectedDayTooltipDemoViewController.swift in Sources */,
